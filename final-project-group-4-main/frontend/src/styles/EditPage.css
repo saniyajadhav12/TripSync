@@ -1,0 +1,170 @@
+/* General Styles */
+.edit-page-container body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    width: 100%;
+  }
+  
+  .edit-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+  }
+  
+  /* Header */
+  .edit-page-container  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    /* background-color: #3e8ed0; */
+    padding: 20px;
+  }
+  
+  .edit-page-container .header h1 {
+    margin: 0;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+  
+  .edit-page-container .user-icon {
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+  }
+  
+  /* Tabs */
+  .edit-page-container .tabs {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    gap: 15px;
+  }
+  
+  .edit-page-container .tab-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #e7e7e7;
+    color: #333;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .edit-page-container .tab-button.active {
+    background-color: #3e8ed0;
+    color: white;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .edit-page-container .tab-button:hover {
+    background-color: #d6d6d6;
+  }
+  
+  /* Form Container */
+  .edit-page-container .form-container {
+    max-width: 700px;
+    width: 90%;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px 25px;
+    margin-bottom: 20px;
+  }
+  
+  .edit-page-container .form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .edit-page-container .form-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #3e8ed0;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .edit-page-container label {
+    display: block;
+    margin-bottom: 15px;
+    color: #555;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .edit-page-container input,
+  textarea {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  
+  .edit-page-container textarea {
+    resize: vertical;
+  }
+  
+  /* Form Buttons */
+  .edit-page-container .form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .edit-page-container .cancel-button,
+  .save-button {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .edit-page-container .cancel-button {
+    background-color: #e57373;
+    color: white;
+    transition: background-color 0.3s;
+  }
+  
+  .edit-page-container .cancel-button:hover {
+    background-color: #d32f2f;
+  }
+  
+  .edit-page-container .save-button {
+    background-color: #3e8ed0;
+    color: white;
+    transition: background-color 0.3s;
+  }
+  
+  .edit-page-container .save-button:hover {
+    background-color: #1565c0;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .tabs {
+      gap: 10px;
+    }
+  
+    .tab-button {
+      font-size: 0.9rem;
+    }
+  
+    input,
+    textarea {
+      font-size: 0.9rem;
+    }
+  }
+  

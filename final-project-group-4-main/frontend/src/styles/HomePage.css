@@ -1,0 +1,252 @@
+.homepage {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #ffffff; /* White background for the entire page */
+    color: #333; /* Base text color */
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    max-height: 100%; /* Restrict height overflow */
+    width: 100%; /* Full-width layout */
+  }
+  
+  .homepage .home-page-container {
+    display: flex;
+    flex-direction: column; /* Align content vertically */
+    align-items: center; /* Center-align content */
+    padding: 0px; /* Remove extra padding */
+  }
+
+.homepage .hero-section {
+  top: 0px;
+  padding-top: 50px;
+  height: 40vh;
+  width: 184.5vh;
+  background: linear-gradient(135deg, #587ddb, #b6fbff);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.homepage .hero-section h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.homepage .hero-section p {
+  font-size: 1.5rem;
+}
+
+.homepage .header {
+  /* background-color: white; */
+  width: 100%;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.homepage .header-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
+  /* Title remains black */
+}
+
+.homepage .add-trip-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  color: black;
+  /* '+' icon is black */
+}
+
+.homepage .profile-icon {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: black;
+  /* Profile icon is black */
+}
+
+.homepage .trip-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px;
+}
+
+.homepage .trip-card-container {
+    width: 1000px; /* Fixed width for uniformity */
+    display: flex; /* Horizontal layout for cards */
+    align-items: center;
+    background-color: #fff; /* Card background */
+    border-radius: 10px; /* Rounded corners for aesthetics */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-bottom: 20px; /* Space between cards */
+    overflow: hidden; /* Ensure content fits within the card */
+    justify-content: center;
+  }
+
+.homepage .trip-image {
+  flex: 2;
+  height: 350px;
+  width: 350px;
+  overflow: hidden;
+}
+
+.homepage .trip-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px 0 0 10px;
+}
+
+.homepage .trip-content {
+  flex: 2;
+  padding: 20px;
+  color: #333;
+}
+
+.homepage .trip-content h3 {
+  margin: 0 0 10px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.homepage .trip-content p {
+  margin: 5px 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #666;
+}
+.homepage .trip-content .trip-button {
+        background: linear-gradient(10deg, #587ddb, #b6fbff);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+}
+.homepage .trip-list {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.homepage .trip-card {
+  background-color: #d3d3d3;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  width: 100%;
+  color: black;
+  /* Trip content is black */
+}
+
+.homepage .trip-card h3 {
+  margin: 0;
+  color: black;
+  /* Trip title is black */
+}
+
+.homepage .trip-card p {
+  margin: 5px 0;
+  color: black;
+  /* Trip details are black */
+}
+
+.homepage .no-trips-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  /* Adjust spacing as needed */
+  text-align: center;
+  color: black;
+  /* Ensure text is visible */
+}
+
+.homepage .no-trips-gif {
+  width: 300px;
+  /* Adjust the size of the GIF */
+  height: auto;
+  /* Maintain aspect ratio */
+  margin-bottom: 20px;
+  /* Space between GIF and text */
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .account-info {
+    width: 100%;
+  }
+
+  .account-name {
+    font-size: 14px;
+    /* Adjust font size for smaller screens */
+    padding: 5px 10px;
+  }
+
+  .profile-symbol {
+    fill: #4b5563;
+    /* Slightly darker gray for smaller screens */
+  }
+
+  .trip-list {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-title {
+    font-size: 16px;
+  }
+
+  .add-trip-button {
+    font-size: 20px;
+  }
+
+  .profile-symbol {
+    width: 20px;
+    height: 20px;
+    /* Adjust icon size for very small screens */
+  }
+
+  .trip-card h3 {
+    font-size: 16px;
+  }
+
+  .trip-card p {
+    font-size: 12px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

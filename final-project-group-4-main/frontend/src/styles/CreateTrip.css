@@ -1,0 +1,146 @@
+/* Styles for the main page container */
+.create-trip-page {
+    background-image: url("../images/CreateTrip1.png"); /* Background image for the page */
+    background-size: cover; /* Ensure the image covers the entire container */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Prevent image tiling */
+    width: 100%; /* Full page width */
+    min-height: 100vh; /* Minimum height to cover the viewport */
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+}
+
+/* Container for the trip form */
+.trip-form-container {
+    padding-top: 50px; /* Add spacing at the top */
+    border-radius: 10px; /* Rounded corners */
+    width: 1500px; /* Fixed width for large screens */
+    margin: 20px 0; /* Vertical margin */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    display: flex; /* Flexbox for alignment */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally */
+}
+
+/* Wrapper for the form */
+.form-wrapper {
+    background-color: rgba(255, 255, 255, 1); /* Solid white background */
+    border-radius: 10px; /* Rounded corners */
+    padding: 30px; /* Inner padding */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Add depth to the wrapper */
+    width: 38%; /* Set width relative to the container */
+    max-width: 800px; /* Limit the maximum width */
+}
+
+/* Title styling within the form */
+.form-wrapper h2 {
+    text-align: center; /* Center-align text */
+    font-size: 28px; /* Font size for the title */
+    font-weight: bold; /* Bold text */
+    color: black; /* Text color */
+    margin-bottom: 0px; /* Remove bottom margin */
+    background-color: #fcefd2; /* Background color for emphasis */
+    padding: 5px 0; /* Vertical padding for spacing */
+    border-radius: 5px; /* Rounded corners */
+    width: 100%; /* Full width of the wrapper */
+}
+
+/* Label styling for form fields */
+.form-wrapper label {
+    display: block; /* Display labels as blocks */
+    margin: 10px 0 5px; /* Add spacing above and below */
+    font-weight: bold; /* Bold text for emphasis */
+    font-size: 18px; /* Set font size */
+    width: 100%; /* Full width within the wrapper */
+}
+
+/* Input fields styling */
+.form-wrapper input {
+    width: 95%; /* Input width relative to the form wrapper */
+    padding: 15px; /* Inner padding for comfort */
+    margin-bottom: 15px; /* Space below inputs */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Text size */
+    color: black; /* Text color */
+    background-color: white; /* Background color */
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
+}
+
+/* Styling for date input fields */
+.form-wrapper input[type="date"] {
+    padding: 15px; /* Add padding for comfort */
+    background-color: #ffffff; /* White background */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    color: black; /* Text color */
+    font-size: 16px; /* Font size */
+}
+
+/* Custom calendar icon for date input fields */
+.form-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" fill="black"><path d="M3 3h10v1H3zm0 2h10v8H3zm0-2V2h1v1zm9 0V2h1z"/></svg>');
+    background: none; /* Remove default styling */
+    cursor: pointer; /* Show pointer on hover */
+}
+
+/* Highlight date input on focus */
+.form-wrapper input[type="date"]:focus {
+    outline: none; /* Remove default outline */
+    border-color: #007bff; /* Blue border on focus */
+}
+
+/* Container for action buttons */
+.trip-form-buttons {
+    display: flex; /* Flexbox for alignment */
+    justify-content: space-between; /* Space out buttons */
+    margin-top: 20px; /* Space above buttons */
+    width: 100%; /* Full width of the form wrapper */
+}
+
+/* General button styling */
+.trip-form-buttons button {
+    padding: 15px 30px; /* Padding for comfortable click area */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor for interactivity */
+    width: 150px; /* Fixed button width */
+    text-align: center; /* Center text inside button */
+}
+
+/* Cancel button specific styling */
+.trip-cancel-button {
+    background-color: #e4cb97; /* Light brown color */
+    color: black; /* Text color */
+}
+
+/* Create button specific styling */
+.trip-create-button {
+    background-color: #81b37a; /* Green color for positive action */
+    color: white; /* Text color */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 1024px) {
+    .form-wrapper {
+        padding: 30px; /* Adjust padding */
+        max-width: 90%; /* Increase flexibility */
+    }
+
+    .form-wrapper h2 {
+        font-size: 24px; /* Adjust title size */
+    }
+
+    .form-wrapper input {
+        padding: 12px; /* Adjust padding for inputs */
+        font-size: 14px; /* Smaller font size */
+    }
+
+    .trip-form-buttons button {
+        font-size: 14px; /* Adjust font size */
+        padding: 12px 20px; /* Adjust padding */
+        width: 120px; /* Smaller button width */
+    }
+}

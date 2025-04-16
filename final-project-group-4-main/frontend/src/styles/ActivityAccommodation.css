@@ -1,0 +1,290 @@
+.new-image
+{
+   background-image: url('../images/9376733.jpg'); /* Replace with the actual image path */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.travel-planner-section {
+  text-align: center;
+  margin: 20px auto;
+}
+
+.planner-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 20px;
+}
+
+.planner-title h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4a90e2;
+}
+
+.planner-icon {
+  color: #4a90e2;
+}
+
+.planner-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.activity-accommodation-unique-container {
+ max-width: 900px;
+  /* margin: 100px auto; */
+  margin-top: 50px;
+  padding: 2rem;
+  width: 500px;
+  border-radius: 8px;
+  color: black;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.travel-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+.header-title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title-icon {
+  color: #4a90e2;
+  animation: float 3s ease-in-out infinite;
+}
+
+.button-icon {
+  transition: transform 0.3s;
+}
+
+.toggle-button-unique:hover .button-icon {
+  transform: scale(1.2) rotate(15deg);
+}
+
+.travel-plane {
+  animation: fly 2s ease-in-out infinite alternate;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-bottom: 1.5rem; */
+}
+
+.form-header-icon {
+  color: #4a90e2;
+  animation: bounce 1.5s ease-in-out infinite alternate;
+}
+
+/* Keyframe Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes fly {
+  0%, 100% { transform: translateX(0) rotate(-5deg); }
+  50% { transform: translateX(10px) rotate(5deg); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Rest of the previous CSS remains the same */
+.header-unique {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-bottom: 2rem; */
+}
+
+.header-unique h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #4a90e2;
+}
+
+/* ... (rest of the previous CSS) ... */
+.header-unique h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #4a90e2;
+}
+
+.header-actions-unique {
+  display: flex;
+  gap: 1rem;
+}
+
+.icon-button-unique {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #4a90e2;
+  transition: transform 0.3s;
+}
+
+.icon-button-unique:hover {
+  transform: scale(1.1);
+}
+
+.toggle-container-unique {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.toggle-button-unique {
+  display: flex;
+  align-items: center;
+  width: auto;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #e0e0e0;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.toggle-button-unique.active {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.toggle-button-unique:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-container-unique {
+  /* margin-top: 1rem; */
+  max-height: 70vh; /* Adjust height as needed */
+  overflow-y: auto; /* Add vertical scrolling */
+  /* background: rgba(255, 255, 255, 0.95); */
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom scrollbar styling (optional) */
+.form-container-unique::-webkit-scrollbar {
+  width: 8px;
+}
+
+.form-container-unique::-webkit-scrollbar-thumb {
+  background-color: #4a90e2;
+  border-radius: 4px;
+}
+
+.form-container-unique::-webkit-scrollbar-track {
+  background-color: #e0e0e0;
+}
+
+.form-unique {
+  /* background-color: white; */
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group-unique {
+  margin-bottom: 1.5rem;
+}
+
+.form-group-unique label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group-unique input,
+.form-group-unique select,
+.form-group-unique textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  background-color: white; /* Removed black background */
+  color: #333;
+  transition: border-color 0.3s;
+}
+
+.form-group-unique input:focus,
+.form-group-unique select:focus,
+.form-group-unique textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.form-actions-unique {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.cancel-button-unique {
+  background-color: #e0e0e0;
+  color: #333;
+   padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 150px;
+    text-align: center;
+}
+
+.cancel-button-unique:hover {
+  background-color: #d0d0d0;
+}
+
+.submit-button-unique {
+  background-color: #4a90e2;
+  color: white;
+   padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 150px;
+    text-align: center;
+}
+
+.submit-button-unique:hover {
+  background-color: #3a80d2;
+}

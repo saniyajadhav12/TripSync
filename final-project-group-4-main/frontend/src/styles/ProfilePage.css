@@ -1,0 +1,252 @@
+.profile-page-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    font-family: Arial, sans-serif;
+    width: 100%;
+    margin-top: 70px;
+    box-sizing: border-box;
+}
+
+.avatar-container {
+    margin-top: 30px;
+    margin-left: 20px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.profile-details-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.account-details {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); /* Bluish purple gradient */
+    color: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 400px;
+    cursor: pointer;
+    transition: max-height 0.5s ease-out, transform 0.3s ease, box-shadow 0.3s ease; /* Add transform and box-shadow transition */
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.account-details:hover {
+    transform: scale(1.05); /* Slightly scale the box on hover */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
+
+.account-details.expanded {
+    max-height: 300px;
+}
+
+.account-details h6 {
+    font-weight: bold;
+}
+
+.trips-list {
+    display: grid; /* Use CSS Grid for layout */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Dynamic columns with max width */
+    gap: 20px; /* Space between cards */
+    margin-top: 20px;
+    padding: 0;
+    max-width: 1200px; /* Optional: constrain maximum width for better design */
+    margin-left: auto; /* Center the grid container */
+    margin-right: auto; /* Center the grid container */
+}
+
+.trip-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow: hidden;
+    width: 300px; /* Adjust width to fit the column */
+    max-width: 100%; /* Prevent cards from exceeding the container width */
+    overflow: hidden;
+    border: 1px solid blue;
+}
+
+.no-trip {
+    color: black;
+}
+
+.trip-card:hover {
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    transform: scale(1.01);
+    transition: all 0.3s ease;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .trips-list {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust column size for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .trips-list {
+        grid-template-columns: 1fr; /* Single column on very small screens */
+    }
+}
+
+.trip-avatar {
+    position: absolute;
+    top: -25px;
+    left: 16px;
+    width: 50px;
+    height: 50px;
+    border: 2px solid #fff;
+}
+
+.no-trips-image {
+    margin: 20px auto;
+    max-width: 300px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.floating-add-button {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+}
+
+/* Gradient styling for View More button */
+.view-more-button {
+    background: #0c49b2; /* Bluish purple gradient */
+    color: white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    text-transform: none; /* Keep text in original case */
+    font-size: 14px;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition for hover effect */
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 10px; /* Space between button and other content */
+}
+
+/* Hover effects for the View More button */
+.view-more-button:hover {
+    transform: scale(1.05); /* Slightly scale the button on hover */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
+
+.view-more-button:focus {
+    outline: none; /* Remove outline on focus */
+}
+
+
+/* Styling for Dialog Box */
+.MuiDialogContent-root {
+    padding: 20px;
+    background-color: #fafafa; /* Light background color for content */
+    border-radius: 8px;
+}
+
+.MuiDialogActions-root {
+    padding: 16px;
+    background-color: #f4f4f4; /* Slightly darker background for buttons */
+}
+
+/* Make Buttons Full Width inside Dialog */
+.MuiDialogActions-root > div {
+    margin: 0;
+}
+
+/* Customize Button colors */
+.MuiButton-containedPrimary {
+    background-color: #3f51b5; /* Primary color for "Edit" button */
+    color: white;
+}
+
+.MuiButton-outlinedPrimary {
+    border-color: #3f51b5;
+    color: #3f51b5; /* Outline color for "Close" button */
+}
+
+/* Responsive Adjustments for Dialog */
+@media (max-width: 600px) {
+    .MuiDialogContent-root {
+        padding: 15px;
+    }
+}
+
+.MuiDialogTitle-root {
+    text-align: center;
+}
+
+/* Styling for the Confirmation Dialog */
+.delete-confirmation-dialog {
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #fff; /* Light background */
+    max-width: 400px;
+    margin: auto; /* Center the dialog */
+}
+
+.delete-confirmation-dialog .MuiDialogTitle-root {
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.25rem;
+    color: #333; /* Darker text color for better contrast */
+    margin-bottom: 20px;
+}
+
+.delete-confirmation-dialog .MuiDialogContent-root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    color: #444; /* Slightly lighter color for the body */
+}
+
+.delete-confirmation-dialog .MuiDialogActions-root {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: #f4f4f4; /* Light background for action buttons */
+}
+
+.delete-confirmation-dialog .MuiButton-containedError {
+    background-color: #e57373; /* Light red color for delete button */
+    color: white;
+    font-weight: bold;
+    width: 48%; /* Adjust width for balance */
+}
+
+.delete-confirmation-dialog .MuiButton-outlinedPrimary {
+    border-color: #3f51b5; /* Blue border for cancel button */
+    color: #3f51b5;
+    font-weight: bold;
+    width: 48%; /* Adjust width for balance */
+}
+
+.delete-confirmation-dialog .MuiButton-root {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.delete-confirmation-dialog .MuiButton-root:hover {
+    transform: scale(1.05); /* Button scale effect on hover */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Light shadow effect */
+}

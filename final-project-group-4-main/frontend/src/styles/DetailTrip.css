@@ -1,0 +1,160 @@
+/* Styles for the DetailTrip Page */
+.detail-trip-page {
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+  min-height: 100vh; /* Full viewport height */
+  height: 100vh; /* Explicitly ensure it covers the entire page */
+  background: linear-gradient(to bottom, #e0f7fa, #fff8e1); /* Full-page gradient */
+  position: relative; /* Necessary for positioning background SVGs */
+  overflow: hidden; /* Ensures SVGs don't overflow outside the page */
+}
+
+/* SVG Background Elements */
+.travel-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* Keep SVGs behind the content */
+  pointer-events: none; /* Prevent SVGs from blocking interaction */
+}
+
+.bg-mountain {
+  position: absolute;
+  bottom: 5%; /* Adjust position to ensure visibility */
+  left: 10%;
+  color: rgba(144, 202, 249, 0.5); /* Light blue with transparency */
+  width: 200px;
+  height: 200px;
+}
+
+.bg-plane {
+  position: absolute;
+  top: 15%;
+  right: 15%;
+  color: rgba(255, 204, 128, 0.5); /* Orange with transparency */
+  width: 150px;
+  height: 150px;
+  transform: rotate(-10deg);
+}
+
+.bg-compass {
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  color: rgba(165, 214, 167, 0.5); /* Greenish tint with transparency */
+  width: 150px;
+  height: 150px;
+  transform: translateY(-50%); /* Center vertically relative to its top */
+}
+
+/* Content Wrapper */
+.content-wrapper {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  color: black;
+  margin-top: 200px;
+  max-width: 800px;
+  margin-left: 300px;
+  width: 100%;
+  z-index: 1; /* Ensure content is above SVGs */
+  /* margin: auto; Center content within the page */
+}
+
+/* Page Title */
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  padding: 0.75rem 1rem;
+  margin-right: 0.5rem;
+  background-color: transparent;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.3s, border-bottom-color 0.3s;
+}
+
+.tab-btn.active {
+  color: #0077b6;
+  border-bottom: 2px solid #0077b6;
+  font-weight: bold;
+}
+
+.tab-btn:hover {
+  color: #005f86;
+}
+
+/* Activity Sections */
+.activity-section {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.activity-detail {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.activity-detail .icon {
+  margin-right: 0.75rem;
+  width: 24px;
+  height: 24px;
+}
+
+/* Activity Detail Icons */
+/* Activity Detail Icons */
+.location-icon {
+  color: #2563eb; /* Blue */
+}
+
+.calendar-icon {
+  color: #16a34a; /* Green */
+}
+
+.duration-icon {
+  color: #9333ea; /* Purple */
+}
+
+.group-icon {
+  color: #dc2626; /* Red */
+}
+
+.difficulty-icon {
+  color: #fbbf24; /* Yellow */
+}
+
+.price-icon {
+  color: #15803d; /* Dark Green */
+}
+
+/* Additional Icons */
+.activity-icon {
+  color: #10b981; /* Emerald Green */
+}
+
+.bed-icon {
+  color: #0055ff; /* Neutral Gray */
+}
+
+.info-icon {
+  color: #3b82f6; /* Light Blue */
+}
