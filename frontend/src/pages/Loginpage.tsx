@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import { Box, Container, Typography, TextField, Button, Snackbar, Alert } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AxiosError } from 'axios';
+import loginBackground from '../images/trip_1.jpg';
 
 interface LoginData {
   username: string;
@@ -79,7 +80,7 @@ const LoginPage: React.FC = () => {
       <Box 
         className="login-page" // Apply the background image to the Box component
         sx={{width: "100%", height: "100vh",
-          backgroundImage: 'url(../src/images/trip_1.jpg)', 
+          backgroundImage: `url(${loginBackground})`, 
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

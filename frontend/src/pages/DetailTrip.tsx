@@ -81,30 +81,20 @@ const DetailTrip: React.FC = () => {
         setIsDropdownOpen((prev) => !prev);
     };
 
-    // Sample data (you would replace this with actual data)
-    const tripData: TripDTO = {
-        id: 0,
-        destination: trip?.destination,
-        description: trip?.description,
-        startDate: trip?.startDate,
-        endDate: trip?.endDate,
-        userId: trip?.userId
-    }
-
     // Render methods remain the same as in the previous implementation
     const renderOverview = () => (
         <div className="activity-section overview-section">
             <div className="activity-detail">
                 <MapPin className="icon location-icon" />
-                <p><strong>Destination:</strong> {tripData.destination}</p>
+                <p><strong>Destination:</strong> {trip?.destination}</p>
             </div>
             <div className="activity-detail">
                 <Calendar className="icon calendar-icon" />
-                <p><strong>Start Date:</strong> {tripData.startDate}</p>
+                <p><strong>Start Date:</strong> {trip?.startDate}</p>
             </div>
             <div className="activity-detail">
                 <Calendar className="icon calendar-icon" />
-                <p><strong>End Date:</strong> {tripData.endDate}</p>
+                <p><strong>End Date:</strong> {trip?.endDate}</p>
             </div>
         </div>
     );
@@ -114,7 +104,7 @@ const DetailTrip: React.FC = () => {
             <div className="section-header">
                 <Info className="icon description-icon" />
             </div>
-            <p className="description-text">{tripData.description}</p>
+            <p className="description-text">{trip?.description}</p>
         </div>
     );
 
@@ -182,7 +172,10 @@ const DetailTrip: React.FC = () => {
             </div>
 
             <div className="content-wrapper">
-                <h1 className="page-title">{tripData.destination}</h1>
+                <h1 className="page-title">{trip?.destination}</h1>
+
+                {loading && <p className="loading-message">Loading trip...</p>}
+                {error && <p className="error-message">{error}</p>}
 
                 <div className="tab-navigation">
                     <button

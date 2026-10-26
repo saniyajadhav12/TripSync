@@ -3,13 +3,14 @@ import Header from "../components/Header"; // Header component for page navigati
 import { getTripById, updateTrip } from "../api/tripApi"; // API functions to get and update a trip
 import "../styles/CreateTrip.css"; // CSS for styling the component
 import { useParams } from "react-router-dom"; // Hook to access route parameters
+import { TripDTO } from "../data/TripDTO"; // Trip Data Transfer Object type
 
 const EditTrip: React.FC = () => {
   // Get the trip ID from URL parameters
   const { id } = useParams<{ id: string }>();
 
   // State for trip data
-  const [trip, setTrip] = useState({
+  const [trip, setTrip] = useState<Omit<TripDTO, "userId">>({
     description: "",
     destination: "",
     startDate: "",
@@ -74,7 +75,7 @@ const EditTrip: React.FC = () => {
 
     try {
       // Prepare updated trip data with user ID
-      const tripData = {
+      const tripData: TripDTO = {
         ...trip,
         userId: Number(user.id), // Convert user ID to a number
       };

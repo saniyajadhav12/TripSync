@@ -77,7 +77,8 @@ const HomePage: React.FC = () => {
   const tripImages = [Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Img9, Img10, Img11, Img12];
 
   // Handle click on a trip card to navigate to its details page
-  const handleTripClick = (id: number) => {
+  const handleTripClick = (id?: number) => {
+    if (id === undefined) return;
     navigate(`/trip/${id}`);
   };
 
@@ -103,8 +104,10 @@ const HomePage: React.FC = () => {
           logout={logout} // Function for logging out
         />
 
-        {/* Show error message if fetching trips fails */}
-        {error ? (
+        {/* Show loading message, or error message if fetching trips fails */}
+        {loading ? (
+          <p className="loading">Loading trips...</p>
+        ) : error ? (
           <p className="error">{error}</p>
         ) : trips.length > 0 ? (
           /* Render list of trips if available */

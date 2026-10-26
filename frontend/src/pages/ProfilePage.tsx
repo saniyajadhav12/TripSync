@@ -1,18 +1,10 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header'; // Import the Header component
 import { Box, Card, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, Avatar } from '@mui/material';
 import '../styles/ProfilePage.css';
 import { getTripsByUserId, deleteTrip } from '../api/tripApi'; // Import the API function
-import { Link, useNavigate } from 'react-router-dom';
-
-interface Trip {
-    id: number;
-    destination: string;
-    description: string;
-    userId: number;
-    startDate: ReactNode;
-    endDate: ReactNode;
-}
+import { useNavigate } from 'react-router-dom';
+import { TripDTO } from '../data/TripDTO';
 
 interface User {
     id: number;
@@ -26,10 +18,10 @@ interface User {
 const ProfilePage: React.FC = () => {
     const [isAccountDetailsExpanded, setIsAccountDetailsExpanded] = useState(false); // State to toggle account details visibility
     const [user, setUser] = useState<User | null>(null);
-    const [userTrips, setUserTrips] = useState<Trip[]>([]); // State to store trips
+    const [userTrips, setUserTrips] = useState<TripDTO[]>([]); // State to store trips
     const [loading, setLoading] = useState<boolean>(true); // Loading state for API call
     const [dialogOpen, setDialogOpen] = useState<boolean>(false); // Track dialog open state
-    const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null); // Store the selected trip
+    const [selectedTrip, setSelectedTrip] = useState<TripDTO | null>(null); // Store the selected trip
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState<boolean>(false); // Track delete confirmation dialog
 
     const navigate = useNavigate();
@@ -56,15 +48,6 @@ const ProfilePage: React.FC = () => {
             setLoading(false); // Set loading state to false after API call
         }
     };
-    const navigateToProfile = () => {
-        console.log('Already on profile page');
-    };
-
-    const logout = () => {
-        console.log('Logout'); // Add your logout logic here
-        sessionStorage.removeItem('user'); // Remove user data from sessionStorage on logout
-    };
-
     const handleAddTrip = () => {
         window.location.href = '/create-trip'; // Redirect to CreateTrip page
     };
@@ -73,7 +56,7 @@ const ProfilePage: React.FC = () => {
         setIsAccountDetailsExpanded(!isAccountDetailsExpanded); // Toggle expansion
     };
 
-    const handleOpenDialog = (trip: Trip) => {
+    const handleOpenDialog = (trip: TripDTO) => {
         setSelectedTrip(trip);
         setDialogOpen(true); // Open the dialog when a trip is selected
     };
@@ -83,15 +66,15 @@ const ProfilePage: React.FC = () => {
         setSelectedTrip(null); // Reset the selected trip
     };
 
-    const handleEditTrip = (id: number) => {
-        if (selectedTrip) {
+    const handleEditTrip = (id: number | undefined) => {
+        if (selectedTrip && id !== undefined) {
             // Redirect to the edit page for the selected trip
             navigate(`/edit-trip/${id}`);
         }
     };
 
     const handleDeleteTrip = async (id: number | undefined) => {
-        if (selectedTrip) {
+        if (selectedTrip && id !== undefined) {
             // Here you can call the API to delete the trip
             console.log(`Deleting trip with ID: ${selectedTrip.id}`);
             // Close the dialog after deleting

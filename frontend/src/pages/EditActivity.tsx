@@ -1,15 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Hotel, Plane } from 'lucide-react';
 import Header from '../components/Header'; // Import Header component
 import '../styles/ActivityAccommodation.css';
 import axios from 'axios';
+import { ActivityDTO, Category } from '../data/ActivityDTO';
+import { AccommodationDTO, AccommodationType } from '../data/AccommodationDTO';
 
 type FormType = 'activity' | 'accommodation';
 
+// Form state shared by the activity and accommodation forms; '' means nothing selected yet
+type EditFormData = Partial<Omit<ActivityDTO, 'category'>> &
+  Partial<Omit<AccommodationDTO, 'type'>> & {
+    category?: Category | '';
+    type?: AccommodationType | '';
+  };
+
 const EditActivity: React.FC = () => {
   const [activeForm, setActiveForm] = useState<FormType | null>(null);
-  const [formData, setFormData] = useState<any>({
-    id: '',
+  const [formData, setFormData] = useState<EditFormData>({
     title: '',
     cost: 0,
     category: '',
@@ -22,22 +30,22 @@ const EditActivity: React.FC = () => {
     checkOutDate: '',
     review: '',
   });
-  const [activities, setActivities] = useState<any[]>([]);
-  const [accommodations, setAccommodations] = useState<any[]>([]);
+  const [activities, setActivities] = useState<ActivityDTO[]>([]);
+  const [accommodations, setAccommodations] = useState<AccommodationDTO[]>([]);
   const [tripId] = useState<number>(1); // Replace with the actual trip ID
   const [userId] = useState<number>(1); // Replace with the logged-in user's ID
 
   const API_BASE_URL = 'http://localhost:8080/api';
 
   // Fetch activities and accommodations for the specific user and trip
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const activitiesResponse = await axios.get(
+      const activitiesResponse = await axios.get<ActivityDTO[]>(
         `${API_BASE_URL}/activities/trip/${tripId}?userId=${userId}`
       );
       setActivities(activitiesResponse.data);
 
-      const accommodationsResponse = await axios.get(
+      const accommodationsResponse = await axios.get<AccommodationDTO[]>(
         `${API_BASE_URL}/accommodations/trip/${tripId}?userId=${userId}`
       );
       setAccommodations(accommodationsResponse.data);
@@ -45,13 +53,13 @@ const EditActivity: React.FC = () => {
       console.error('Error fetching data:', error);
       alert('Failed to fetch data. Please try again.');
     }
-  };
+  }, [tripId, userId]);
 
   useEffect(() => {
     fetchData();
-  }, [tripId]);
+  }, [fetchData]);
 
-  const handleEditClick = (item: any, type: FormType) => {
+  const handleEditClick = (item: ActivityDTO | AccommodationDTO, type: FormType) => {
     setFormData(item); // Pre-fill the form with the selected item's details
     setActiveForm(type);
   };
@@ -74,7 +82,6 @@ const EditActivity: React.FC = () => {
       }
 
       setFormData({
-        id: '',
         title: '',
         cost: 0,
         category: '',
@@ -97,7 +104,6 @@ const EditActivity: React.FC = () => {
 
   const handleCancel = () => {
     setFormData({
-      id: '',
       title: '',
       cost: 0,
       category: '',

@@ -5,6 +5,7 @@ import { createUser } from '../api/userApi';
 import { Box, Typography, TextField, Button, CircularProgress } from '@mui/material';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import signUpBackground from '../images/trip_4.jpg';
 
 interface FormData {
   firstName: string;
@@ -88,7 +89,7 @@ const SignUpPage: React.FC = () => {
         sx={{
           width: "100%",
           height: "100vh",
-          backgroundImage: 'url(../src/images/trip_4.jpg)', 
+          backgroundImage: `url(${signUpBackground})`, 
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

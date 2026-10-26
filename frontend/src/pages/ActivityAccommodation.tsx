@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
-import { PlusCircle, Hotel, X, Plane, Compass } from 'lucide-react';
+import { Hotel, Plane, Compass } from 'lucide-react';
 import Header from '../components/Header'; // Import Header component
 import '../styles/ActivityAccommodation.css';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 
 type FormType = "activity" | "accommodation";
 
@@ -12,7 +11,7 @@ const ActivityAccommodation: React.FC = () => {
   const { tripId } = useParams<{ tripId: string }>();
   const [activeForm, setActiveForm] = useState<FormType | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const [formData, setFormData] = useState<any>({
+  const [formData, setFormData] = useState({
     title: "",
     cost: 0,
     category: "",
