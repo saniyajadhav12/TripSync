@@ -7,6 +7,7 @@ import edu.neu.csye6200.tripsync.service.ActivityService;
 import edu.neu.csye6200.tripsync.service.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class ActivityController {
     }
 
     //Helper method to convert Activity to ActivityDTO
-    ActivityDTO convertToDTO(Activity activity){
+    static ActivityDTO convertToDTO(Activity activity){
         ActivityDTO activityDTO = new ActivityDTO();
         activityDTO.setId(activity.getId());
         activityDTO.setTitle(activity.getTitle());
@@ -40,13 +41,10 @@ public class ActivityController {
         return activityDTO;
     }
 
-    // Create a new activity
+    // Create a new activity on one of the current user's trips
     @PostMapping
-    public ResponseEntity<ActivityDTO> createActivity(@RequestBody ActivityDTO activityDTO) {
-        Trip trip = tripService.getTripById(activityDTO.getTripId());
-        if (trip==null){
-            return ResponseEntity.status(404).body(null); // User not found
-        }
+    public ResponseEntity<ActivityDTO> createActivity(@AuthenticationPrincipal Long userId, @RequestBody ActivityDTO activityDTO) {
+        Trip trip = tripService.getTripForUser(activityDTO.getTripId(), userId);
 
         Activity activity = new Activity();
         activity.setTitle(activityDTO.getTitle());
@@ -61,66 +59,41 @@ public class ActivityController {
         return ResponseEntity.status(201).body(convertToDTO(createdActivity));
     }
 
-    // Get all activities
-    @GetMapping
-    public ResponseEntity<List<ActivityDTO>> getAllActivities() {
-        List<Activity> activities = activityService.getAllActivities();
-        List<ActivityDTO> activityDTOList = activities.stream().map(this::convertToDTO).toList();
-        return ResponseEntity.ok(activityDTOList);
-    }
-
     // Get an activity by its ID
     @GetMapping("/{id}")
-    public ResponseEntity<ActivityDTO> getActivityById(@PathVariable Long id) {
-        Activity activity = activityService.getActivityById(id);
-        return activity==null ? ResponseEntity.notFound().build() : ResponseEntity.ok(convertToDTO(activity));
+    public ResponseEntity<ActivityDTO> getActivityById(@AuthenticationPrincipal Long userId, @PathVariable Long id) {
+        return ResponseEntity.ok(convertToDTO(activityService.getActivityForUser(id, userId)));
     }
 
     // Get all activities by trip ID
     @GetMapping("/trip/{tripId}")
-    public ResponseEntity<List<ActivityDTO>> getActivitiesByTripId(@PathVariable Long tripId) {
-        Trip trip = tripService.getTripById(tripId);
-        if (trip == null) {
-            return ResponseEntity.status(404).body(null); // Trip not found
-        }
-
-        List<Activity> activities = activityService.getActivitiesByTripId(tripId);
-        List<ActivityDTO> activityDTOList = activities.stream().map(this::convertToDTO).toList();
+    public ResponseEntity<List<ActivityDTO>> getActivitiesByTripId(@AuthenticationPrincipal Long userId, @PathVariable Long tripId) {
+        List<ActivityDTO> activityDTOList = activityService.getActivitiesForTrip(tripId, userId).stream()
+                .map(ActivityController::convertToDTO)
+                .toList();
         return ResponseEntity.ok(activityDTOList);
     }
 
-
-
-    // Update an existing activity
+    // Update an existing activity (it stays on its current trip)
     @PutMapping("/{id}")
-    public ResponseEntity<ActivityDTO> updateActivity(@PathVariable Long id, @RequestBody ActivityDTO activityDTO) {
-        Activity activity = activityService.getActivityById(id);
-        if(activity==null){
-            return ResponseEntity.notFound().build();
-        }
-        Trip trip = tripService.getTripById(activityDTO.getTripId());
-        if(trip==null){
-            return ResponseEntity.status(404).body(null);
-        }
-
+    public ResponseEntity<ActivityDTO> updateActivity(@AuthenticationPrincipal Long userId, @PathVariable Long id,
+                                                      @RequestBody ActivityDTO activityDTO) {
+        Activity activity = new Activity();
         activity.setTitle(activityDTO.getTitle());
         activity.setCategory(activityDTO.getCategory());
         activity.setDescription(activityDTO.getDescription());
         activity.setStartDateTime(activityDTO.getStartDateTime());
         activity.setEndDateTime(activityDTO.getEndDateTime());
         activity.setCost(activityDTO.getCost());
-        activity.setTrip(trip);
 
-        Activity updatedActivity = activityService.updateActivity(id, activity);
+        Activity updatedActivity = activityService.updateActivity(id, userId, activity);
         return ResponseEntity.ok(convertToDTO(updatedActivity));
-
     }
 
     // Delete an activity by ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteActivity(@PathVariable Long id) {
-        return activityService.deleteActivity(id)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.notFound().build();
+    public ResponseEntity<Void> deleteActivity(@AuthenticationPrincipal Long userId, @PathVariable Long id) {
+        activityService.deleteActivity(id, userId);
+        return ResponseEntity.ok().build();
     }
 }

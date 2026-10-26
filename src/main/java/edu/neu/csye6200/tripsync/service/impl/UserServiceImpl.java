@@ -1,103 +1,103 @@
 package edu.neu.csye6200.tripsync.service.impl;
 
+import edu.neu.csye6200.tripsync.dto.SignupRequest;
+import edu.neu.csye6200.tripsync.dto.UpdateUserRequest;
+import edu.neu.csye6200.tripsync.exception.DuplicateResourceException;
+import edu.neu.csye6200.tripsync.exception.ResourceNotFoundException;
 import edu.neu.csye6200.tripsync.model.User;
+import edu.neu.csye6200.tripsync.repository.TripRepository;
 import edu.neu.csye6200.tripsync.repository.UserRepository;
 import edu.neu.csye6200.tripsync.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private final UserRepository userRepository;
-
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final TripRepository tripRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, TripRepository tripRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.tripRepository = tripRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     @Transactional
-    public void createUser(User user) {
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        userRepository.save(user);
+    public User createUser(SignupRequest request) {
+        if (userRepository.findByUsername(request.username()) != null) {
+            throw new DuplicateResourceException("Username is already taken");
+        }
+        if (userRepository.findByEmail(request.email()) != null) {
+            throw new DuplicateResourceException("Email is already taken");
+        }
+
+        User user = new User();
+        user.setFirstName(request.firstName());
+        user.setLastName(request.lastName());
+        user.setEmail(request.email());
+        user.setUsername(request.username());
+        user.setPassword(passwordEncoder.encode(request.password()));
+        return userRepository.save(user);
     }
 
     @Override
-    public User authenticateUser(String username, String password) {
+    public Optional<User> authenticateUser(String username, String password) {
+        if (username == null || password == null) {
+            return Optional.empty();
+        }
         User user = userRepository.findByUsername(username);
-        if(user == null) {
-            throw new RuntimeException("Invalid username or password");
-        }
-
         // Check if the provided password matches the stored encrypted password
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            return user;
-        } else {
-            throw new RuntimeException("Invalid username or password");
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+            return Optional.empty();
         }
+        return Optional.of(user);
     }
 
-    // Update user details (Example)
-    public User updateUser(Long userId, User updatedUser) {
+    @Override
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    @Override
+    @Transactional
+    public User updateUser(Long userId, UpdateUserRequest request) {
         User existingUser = getUserById(userId);
-        existingUser.setFirstName(updatedUser.getFirstName());
-        existingUser.setLastName(updatedUser.getLastName());
-        existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setUsername(updatedUser.getUsername());
-        String encodedPassword = passwordEncoder.encode(updatedUser.getPassword());
-        existingUser.setPassword(encodedPassword);
+
+        User sameUsername = userRepository.findByUsername(request.username());
+        if (sameUsername != null && !sameUsername.getId().equals(userId)) {
+            throw new DuplicateResourceException("Username is already taken");
+        }
+        User sameEmail = userRepository.findByEmail(request.email());
+        if (sameEmail != null && !sameEmail.getId().equals(userId)) {
+            throw new DuplicateResourceException("Email is already taken");
+        }
+
+        existingUser.setFirstName(request.firstName());
+        existingUser.setLastName(request.lastName());
+        existingUser.setEmail(request.email());
+        existingUser.setUsername(request.username());
+        // Only change the password when a new one is provided
+        if (request.password() != null && !request.password().isBlank()) {
+            existingUser.setPassword(passwordEncoder.encode(request.password()));
+        }
         return userRepository.save(existingUser);
     }
 
-    // Delete user by ID
+    @Override
+    @Transactional
     public void deleteUser(Long userId) {
         User user = getUserById(userId);
+        // Trips reference the user, so remove them first (activities and accommodations cascade)
+        tripRepository.deleteAll(tripRepository.findByUserId(userId));
         userRepository.delete(user);
     }
-
-    // Get user by ID
-    public User getUserById(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            return user.get();
-        } else {
-            throw new IllegalArgumentException("User with ID " + userId + " not found");
-        }
-    }
-
-    // Get all users
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public boolean isUsernameTaken(String username) {
-        User existingUser = userRepository.findByUsername(username);
-        if (existingUser != null) {
-            System.out.println("Username already exists: " + username);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isEmailTaken(String email) {
-        User existingUser = userRepository.findByEmail(email);
-        if (existingUser != null) {
-            System.out.println("Email already exists: " + email);
-            return true;
-        }
-        return false;
-    }
-
 }

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "users") // "user" is a reserved word in H2 and other databases
 public class User {
 
     @Id
@@ -24,6 +26,7 @@ public class User {
     @Email
     private String email;
     private String username;
+    @ToString.Exclude
     private String password;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -7,6 +7,7 @@ import edu.neu.csye6200.tripsync.service.AccommodationService;
 import edu.neu.csye6200.tripsync.service.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class AccommodationController {
     }
 
     //Helper method to convert Accommodation to AccommodationDTO
-    AccommodationDTO convertToDTO(Accommodation accommodation) {
+    static AccommodationDTO convertToDTO(Accommodation accommodation) {
         AccommodationDTO accommodationDTO = new AccommodationDTO();
         accommodationDTO.setId(accommodation.getId());
         accommodationDTO.setName(accommodation.getName());
@@ -41,47 +42,27 @@ public class AccommodationController {
         return accommodationDTO;
     }
 
-
-    // Get all accommodations
-    @GetMapping
-    public ResponseEntity<List<AccommodationDTO>> getAllAccommodations() {
-        List<Accommodation> accommodations = accommodationService.getAllAccommodations();
-        List<AccommodationDTO> accommodationDTOList = accommodations.stream().map(this::convertToDTO).toList();
-        return ResponseEntity.ok(accommodationDTOList);
-    }
-
     // Get accommodation by its ID
     @GetMapping("/{id}")
-    public ResponseEntity<AccommodationDTO> getAccommodationById(@PathVariable Long id) {
-        Accommodation accommodation = accommodationService.getAccommodationById(id);
-        return accommodation==null
-                ? ResponseEntity.notFound().build()
-                : ResponseEntity.ok(convertToDTO(accommodation));
+    public ResponseEntity<AccommodationDTO> getAccommodationById(@AuthenticationPrincipal Long userId, @PathVariable Long id) {
+        return ResponseEntity.ok(convertToDTO(accommodationService.getAccommodationForUser(id, userId)));
     }
 
     // Get accommodations by trip ID
     @GetMapping("/trip/{tripId}")
-    public ResponseEntity<List<AccommodationDTO>> getAccommodationsByTripId(@PathVariable Long tripId) {
-        Trip trip = tripService.getTripById(tripId);
-        if (trip == null) {
-            return ResponseEntity.notFound().build(); // Trip not found
-        }
-
-        List<Accommodation> accommodations = accommodationService.getAccommodationsByTripId(tripId);
-        List<AccommodationDTO> accommodationDTOList = accommodations.stream()
-                .map(this::convertToDTO)
+    public ResponseEntity<List<AccommodationDTO>> getAccommodationsByTripId(@AuthenticationPrincipal Long userId,
+                                                                            @PathVariable Long tripId) {
+        List<AccommodationDTO> accommodationDTOList = accommodationService.getAccommodationsForTrip(tripId, userId).stream()
+                .map(AccommodationController::convertToDTO)
                 .toList();
-
         return ResponseEntity.ok(accommodationDTOList);
     }
 
-    // Create a new accommodation
+    // Create a new accommodation on one of the current user's trips
     @PostMapping
-    public ResponseEntity<AccommodationDTO> createAccommodation(@RequestBody AccommodationDTO accommodationDTO) {
-        Trip trip = tripService.getTripById(accommodationDTO.getTripId());
-        if (trip == null) {
-            return ResponseEntity.status(404).body(null); // Trip not found
-        }
+    public ResponseEntity<AccommodationDTO> createAccommodation(@AuthenticationPrincipal Long userId,
+                                                                @RequestBody AccommodationDTO accommodationDTO) {
+        Trip trip = tripService.getTripForUser(accommodationDTO.getTripId(), userId);
 
         Accommodation accommodation = new Accommodation();
         accommodation.setName(accommodationDTO.getName());
@@ -97,19 +78,11 @@ public class AccommodationController {
         return ResponseEntity.status(201).body(convertToDTO(createdAccommodation));
     }
 
-    // Update an existing accommodation
+    // Update an existing accommodation (it stays on its current trip)
     @PutMapping("/{id}")
-    public ResponseEntity<AccommodationDTO> updateAccommodation(@PathVariable Long id, @RequestBody AccommodationDTO accommodationDTO) {
-        Accommodation accommodation = accommodationService.getAccommodationById(id);
-        if (accommodation == null) {
-            return ResponseEntity.notFound().build(); // Accommodation not found
-        }
-
-        Trip trip = tripService.getTripById(accommodationDTO.getTripId());
-        if (trip == null) {
-            return ResponseEntity.status(404).body(null); // Trip not found
-        }
-
+    public ResponseEntity<AccommodationDTO> updateAccommodation(@AuthenticationPrincipal Long userId, @PathVariable Long id,
+                                                                @RequestBody AccommodationDTO accommodationDTO) {
+        Accommodation accommodation = new Accommodation();
         accommodation.setName(accommodationDTO.getName());
         accommodation.setAddress(accommodationDTO.getAddress());
         accommodation.setType(accommodationDTO.getType());
@@ -117,18 +90,15 @@ public class AccommodationController {
         accommodation.setCheckOutDate(accommodationDTO.getCheckOutDate());
         accommodation.setReview(accommodationDTO.getReview());
         accommodation.setCost(accommodationDTO.getCost());
-        accommodation.setTrip(trip);
 
-        Accommodation updatedAccommodation = accommodationService.updateAccommodation(id, accommodation);
+        Accommodation updatedAccommodation = accommodationService.updateAccommodation(id, userId, accommodation);
         return ResponseEntity.ok(convertToDTO(updatedAccommodation));
     }
 
-
     // Delete accommodation by ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
-        return accommodationService.deleteAccommodation(id)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.notFound().build();
+    public ResponseEntity<Void> deleteAccommodation(@AuthenticationPrincipal Long userId, @PathVariable Long id) {
+        accommodationService.deleteAccommodation(id, userId);
+        return ResponseEntity.ok().build();
     }
 }

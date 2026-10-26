@@ -1,89 +1,69 @@
 package edu.neu.csye6200.tripsync.controller;
 
 import edu.neu.csye6200.tripsync.dto.LoginDTO;
+import edu.neu.csye6200.tripsync.dto.LoginResponse;
+import edu.neu.csye6200.tripsync.dto.SignupRequest;
+import edu.neu.csye6200.tripsync.dto.UpdateUserRequest;
+import edu.neu.csye6200.tripsync.dto.UserResponse;
 import edu.neu.csye6200.tripsync.model.User;
+import edu.neu.csye6200.tripsync.security.JwtService;
 import edu.neu.csye6200.tripsync.service.UserService;
-import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
+    private final JwtService jwtService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtService jwtService) {
         this.userService = userService;
-    }
-
-    // Get all users
-    @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
-    }
-
-    // Get a user by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        try {
-            User user = userService.getUserById(id);
-            return ResponseEntity.ok(user);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+        this.jwtService = jwtService;
     }
 
     // Create a new user
     @PostMapping("/signup")
-    public ResponseEntity<?> createUser(@RequestBody User user) {
-        if (userService.isUsernameTaken(user.getUsername())) {
-            return ResponseEntity.status(400).body("Username is already taken!");
-        }
-        if (userService.isEmailTaken(user.getEmail())) {
-            return ResponseEntity.status(400).body("Email is already taken!");
-        }
-        userService.createUser(user);
-        return ResponseEntity.status(201).body(user);
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody SignupRequest request) {
+        User user = userService.createUser(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.from(user));
     }
 
-    // Update an existing user
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        try {
-            User user = userService.updateUser(id, updatedUser);
-            return ResponseEntity.ok(user);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    // Delete a user by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        try {
-            userService.deleteUser(id);
-            return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    // Authenticate user (login)
+    // Authenticate user (login) and issue a JWT
     @PostMapping("/login")
-    public ResponseEntity<User> authenticateUser(@RequestBody LoginDTO credentials, HttpSession session) {
-        try {
-            User user = userService.authenticateUser(credentials.getUsername(), credentials.getPassword());
-            session.setAttribute("user", user);
-            return ResponseEntity.ok(user);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(401).body(null);  // Unauthorized
-        }
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginDTO credentials) {
+        return userService.authenticateUser(credentials.getUsername(), credentials.getPassword())
+                .<ResponseEntity<?>>map(user -> ResponseEntity.ok(
+                        new LoginResponse(jwtService.generateToken(user), UserResponse.from(user))))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("message", "Invalid username or password")));
+    }
+
+    // Get the current user
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser(@AuthenticationPrincipal Long userId) {
+        return ResponseEntity.ok(UserResponse.from(userService.getUserById(userId)));
+    }
+
+    // Update the current user
+    @PutMapping("/me")
+    public ResponseEntity<UserResponse> updateCurrentUser(@AuthenticationPrincipal Long userId,
+                                                          @Valid @RequestBody UpdateUserRequest request) {
+        return ResponseEntity.ok(UserResponse.from(userService.updateUser(userId, request)));
+    }
+
+    // Delete the current user and their trips
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteCurrentUser(@AuthenticationPrincipal Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
     }
 }
