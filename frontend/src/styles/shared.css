@@ -1,0 +1,137 @@
+/* Shared UI classes used across pages: buttons, action rows, empty states and item rows. */
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.btn:focus-visible {
+  outline: 3px solid rgba(74, 144, 226, 0.4);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background-color: #4a90e2;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #3a7bc8;
+}
+
+.btn-secondary {
+  background-color: #fff;
+  border-color: #4a90e2;
+  color: #2f6fb8;
+}
+
+.btn-secondary:hover {
+  background-color: #eef5fd;
+}
+
+.btn-danger {
+  background-color: #fff;
+  border-color: #d64545;
+  color: #c03030;
+}
+
+.btn-danger:hover {
+  background-color: #fdeeee;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+/* Row of page-level action buttons, e.g. "Add activity / accommodation" */
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ---------- Empty states ---------- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: #555;
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+/* ---------- Item rows (activities / accommodations) ---------- */
+.item-list {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.6rem;
+  background: #fff;
+  border: 1px solid #e3e8f0;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.item-main {
+  min-width: 0; /* allow long titles to wrap instead of pushing the buttons out */
+}
+
+.item-title {
+  display: block;
+  font-weight: 600;
+  color: #222;
+  overflow-wrap: anywhere;
+}
+
+.item-meta {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.item-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .item-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .item-actions {
+    justify-content: flex-end;
+  }
+}

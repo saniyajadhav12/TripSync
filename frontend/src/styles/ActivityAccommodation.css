@@ -42,11 +42,10 @@
 }
 
 .activity-accommodation-unique-container {
- max-width: 900px;
-  /* margin: 100px auto; */
-  margin-top: 50px;
+  width: 100%;
+  max-width: 640px;
+  margin: 77px 16px 32px; /* Leave room for the fixed header */
   padding: 2rem;
-  width: 500px;
   border-radius: 8px;
   color: black;
   background: rgba(255, 255, 255, 0.9);
@@ -157,6 +156,7 @@
 
 .toggle-container-unique {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
   margin-bottom: 2rem;
@@ -252,6 +252,7 @@
 
 .form-actions-unique {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: 1rem;
   margin-top: 2rem;
@@ -265,7 +266,7 @@
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-    width: 150px;
+    flex: 0 1 150px;
     text-align: center;
 }
 
@@ -281,10 +282,52 @@
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-    width: 150px;
+    flex: 0 1 150px;
     text-align: center;
 }
 
 .submit-button-unique:hover {
   background-color: #3a80d2;
+}
+
+/* Section headings on the edit-items page */
+.edit-lists h3 {
+  margin: 0 0 0.75rem;
+  color: #333;
+}
+
+/* Phones: less nested padding so the form has room */
+@media (max-width: 600px) {
+  .activity-accommodation-unique-container {
+    padding: 1.25rem;
+  }
+
+  .header-title-with-icon h1 {
+    font-size: 1.6rem;
+  }
+
+  .toggle-container-unique {
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Stack the add/done buttons at full width so they line up */
+  .toggle-container-unique > button {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+  .form-container-unique {
+    padding: 1rem;
+  }
+
+  .form-unique {
+    padding: 0.5rem;
+  }
+
+  .cancel-button-unique,
+  .submit-button-unique {
+    flex: 1 1 0;
+    padding: 12px 16px;
+  }
 }

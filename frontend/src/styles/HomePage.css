@@ -21,8 +21,9 @@
 .homepage .hero-section {
   top: 0px;
   padding-top: 50px;
-  height: 40vh;
-  width: 184.5vh;
+  min-height: 40vh;
+  padding-left: 16px;
+  padding-right: 16px;
   background: linear-gradient(135deg, #587ddb, #b6fbff);
   display: flex;
   flex-direction: column;
@@ -36,12 +37,12 @@
 }
 
 .homepage .hero-section h1 {
-  font-size: 3rem;
+  font-size: clamp(1.8rem, 6vw, 3rem);
   margin-bottom: 10px;
 }
 
 .homepage .hero-section p {
-  font-size: 1.5rem;
+  font-size: clamp(1.05rem, 3vw, 1.5rem);
 }
 
 .homepage .header {
@@ -87,34 +88,41 @@
   padding: 40px;
 }
 
+/* Trip card: image on top, details below, so cards can sit side by side in the grid */
 .homepage .trip-card-container {
-    width: 1000px; /* Fixed width for uniformity */
-    display: flex; /* Horizontal layout for cards */
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     background-color: #fff; /* Card background */
     border-radius: 10px; /* Rounded corners for aesthetics */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    margin-bottom: 20px; /* Space between cards */
     overflow: hidden; /* Ensure content fits within the card */
-    justify-content: center;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.2s;
   }
 
+.homepage .trip-card-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+}
+
 .homepage .trip-image {
-  flex: 2;
-  height: 350px;
-  width: 350px;
+  height: 220px;
+  width: 100%;
   overflow: hidden;
 }
 
 .homepage .trip-image img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 10px 0 0 10px;
 }
 
 .homepage .trip-content {
-  flex: 2;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   padding: 20px;
   color: #333;
 }
@@ -130,6 +138,7 @@
   font-size: 1rem;
   line-height: 1.5;
   color: #666;
+  overflow-wrap: anywhere;
 }
 .homepage .trip-content .trip-button {
         background: linear-gradient(10deg, #587ddb, #b6fbff);
@@ -140,11 +149,29 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        align-self: flex-start;
+        margin-top: auto;
 }
+
+/* Trip grid: 3 columns on laptops, 2 on tablets, 1 on phones */
 .homepage .trip-list {
-  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
   width: 100%;
-  max-width: 600px;
+  max-width: 1200px;
+  padding: 24px 16px 40px;
+}
+
+@media (max-width: 600px) {
+  .homepage .trip-list {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .homepage .trip-image {
+    height: 180px;
+  }
 }
 
 .homepage .trip-card {
@@ -183,7 +210,8 @@
 }
 
 .homepage .no-trips-gif {
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
   /* Adjust the size of the GIF */
   height: auto;
   /* Maintain aspect ratio */

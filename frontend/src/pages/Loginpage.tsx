@@ -79,7 +79,8 @@ const LoginPage: React.FC = () => {
 
       <Box 
         className="login-page" // Apply the background image to the Box component
-        sx={{width: "100%", height: "100vh",
+        sx={{width: "100%", minHeight: "100vh",
+          pt: '61px', pb: 2, // Leave room for the fixed header
           backgroundImage: `url(${loginBackground})`, 
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -94,7 +95,7 @@ const LoginPage: React.FC = () => {
             sx={{
               backgroundColor: 'rgba(255, 255, 255, 0.8)', 
               borderRadius: 2,
-              padding: 4,
+              padding: { xs: 3, sm: 4 },
               boxShadow: 4, 
             }}
           >
@@ -111,7 +112,7 @@ const LoginPage: React.FC = () => {
                 type="text"
                 value={formData.username}
                 onChange={handleChange}
-                sx={{ mb: 2, '& .MuiInputLabel-root': { top: '-8px' } }} // Adjust label position
+                sx={{ mb: 2 }}
               />
               <TextField
                 label="Password"
@@ -121,7 +122,7 @@ const LoginPage: React.FC = () => {
                 type="password"
                 value={formData.password}
                 onChange={handleChange}
-                sx={{ mb: 2, '& .MuiInputLabel-root': { top: '-8px' } }} // Adjust label position
+                sx={{ mb: 2 }}
               />
               <Button 
                 type="submit"

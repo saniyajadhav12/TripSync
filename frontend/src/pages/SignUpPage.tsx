@@ -91,7 +91,8 @@ const SignUpPage: React.FC = () => {
       <Box className="signup-page"
         sx={{
           width: "100%",
-          height: "100vh",
+          minHeight: "100vh",
+          pt: '61px', pb: 2, px: 2, // Leave room for the fixed header
           backgroundImage: `url(${signUpBackground})`, 
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -105,13 +106,13 @@ const SignUpPage: React.FC = () => {
           sx={{
             backgroundColor: 'rgba(255, 255, 255, 0.8)', 
             borderRadius: 2, 
-            padding: 4, 
+            padding: { xs: 3, sm: 4 }, 
             boxShadow: 4, 
             width: "100%", 
             maxWidth: "500px", // Optional: Adjust width of the form
           }}
         >
-          <Typography variant="h4" gutterBottom sx={{ color: "#333", mb: 3 }}>
+          <Typography variant="h4" gutterBottom sx={{ color: "#333", mb: 2 }}>
             Sign-Up
           </Typography>
 
@@ -122,24 +123,26 @@ const SignUpPage: React.FC = () => {
           {error && <Typography color="error">{error}</Typography>}
 
           <form onSubmit={handleSubmit}>
-            <TextField
-              label="First Name"
-              name="firstName"
-              variant="outlined"
-              fullWidth
-              value={formData.firstName}
-              onChange={handleChange}
-              sx={{ mb: 2, '& .MuiInputLabel-root': { top: '-8px' } }} // Adjust label position
-            />
-            <TextField
-              label="Last Name"
-              name="lastName"
-              variant="outlined"
-              fullWidth
-              value={formData.lastName}
-              onChange={handleChange}
-              sx={{ mb: 2, '& .MuiInputLabel-root': { top: '-8px' } }}
-            />
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, columnGap: 2 }}>
+              <TextField
+                label="First Name"
+                name="firstName"
+                variant="outlined"
+                fullWidth
+                value={formData.firstName}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                label="Last Name"
+                name="lastName"
+                variant="outlined"
+                fullWidth
+                value={formData.lastName}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Box>
             <TextField
               label="Email"
               name="email"
@@ -147,7 +150,7 @@ const SignUpPage: React.FC = () => {
               fullWidth
               value={formData.email}
               onChange={handleChange}
-              sx={{ mb: 2, '& .MuiInputLabel-root': { top: '-8px' } }}
+              sx={{ mb: 2 }}
             />
             <TextField
               label="Username"
@@ -156,28 +159,30 @@ const SignUpPage: React.FC = () => {
               fullWidth
               value={formData.username}
               onChange={handleChange}
-              sx={{ mb: 2, '& .MuiInputLabel-root': { top: '-8px' } }}
+              sx={{ mb: 2 }}
             />
-            <TextField
-              label="Password"
-              name="password"
-              type="password"
-              variant="outlined"
-              fullWidth
-              value={formData.password}
-              onChange={handleChange}
-              sx={{ mb: 2, '& .MuiInputLabel-root': { top: '-8px' } }}
-            />
-            <TextField
-              label="Confirm Password"
-              name="confirmPassword"
-              type="password"
-              variant="outlined"
-              fullWidth
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              sx={{ mb: 2, '& .MuiInputLabel-root': { top: '-8px' } }}
-            />
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, columnGap: 2 }}>
+              <TextField
+                label="Password"
+                name="password"
+                type="password"
+                variant="outlined"
+                fullWidth
+                value={formData.password}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                label="Confirm Password"
+                name="confirmPassword"
+                type="password"
+                variant="outlined"
+                fullWidth
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Box>
 
             <Button
               type="submit"

@@ -164,7 +164,7 @@ const ProfilePage: React.FC = () => {
                         </Card>
                     ))
                 ) : (
-                    <Box textAlign="center" marginTop={4}>
+                    <Box className="empty-state" textAlign="center" marginTop={4}>
                         <div className="no-trips-image" role="img" aria-label="No trips" style={{ fontSize: '96px' }}>
                             🧳
                         </div>

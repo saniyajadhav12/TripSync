@@ -13,11 +13,8 @@
 
 /* Container for the trip form */
 .trip-form-container {
-    padding-top: 50px; /* Add spacing at the top */
-    border-radius: 10px; /* Rounded corners */
-    width: 1500px; /* Fixed width for large screens */
-    margin: 20px 0; /* Vertical margin */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    padding: 77px 16px 32px; /* Leave room for the fixed header */
+    width: 100%; /* Fill the page; the form itself has a max width */
     display: flex; /* Flexbox for alignment */
     flex-direction: column; /* Stack children vertically */
     align-items: center; /* Center children horizontally */
@@ -29,8 +26,8 @@
     border-radius: 10px; /* Rounded corners */
     padding: 30px; /* Inner padding */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Add depth to the wrapper */
-    width: 38%; /* Set width relative to the container */
-    max-width: 800px; /* Limit the maximum width */
+    width: 100%;
+    max-width: 520px; /* Limit the maximum width */
 }
 
 /* Title styling within the form */
@@ -57,7 +54,7 @@
 
 /* Input fields styling */
 .form-wrapper input {
-    width: 95%; /* Input width relative to the form wrapper */
+    width: 100%; /* Input width relative to the form wrapper */
     padding: 15px; /* Inner padding for comfort */
     margin-bottom: 15px; /* Space below inputs */
     border: 1px solid #ccc; /* Light border */
@@ -95,6 +92,7 @@
 .trip-form-buttons {
     display: flex; /* Flexbox for alignment */
     justify-content: space-between; /* Space out buttons */
+    gap: 12px;
     margin-top: 20px; /* Space above buttons */
     width: 100%; /* Full width of the form wrapper */
 }
@@ -106,7 +104,7 @@
     border-radius: 5px; /* Rounded corners */
     font-size: 16px; /* Font size */
     cursor: pointer; /* Pointer cursor for interactivity */
-    width: 150px; /* Fixed button width */
+    flex: 0 1 150px; /* 150px wide, shrinking on narrow screens */
     text-align: center; /* Center text inside button */
 }
 
@@ -122,11 +120,10 @@
     color: white; /* Text color */
 }
 
-/* Responsive design for smaller screens */
-@media (max-width: 1024px) {
+/* Responsive design for phones */
+@media (max-width: 600px) {
     .form-wrapper {
-        padding: 30px; /* Adjust padding */
-        max-width: 90%; /* Increase flexibility */
+        padding: 20px; /* Adjust padding */
     }
 
     .form-wrapper h2 {
@@ -135,12 +132,10 @@
 
     .form-wrapper input {
         padding: 12px; /* Adjust padding for inputs */
-        font-size: 14px; /* Smaller font size */
     }
 
     .trip-form-buttons button {
-        font-size: 14px; /* Adjust font size */
-        padding: 12px 20px; /* Adjust padding */
-        width: 120px; /* Smaller button width */
+        flex: 1 1 0; /* Buttons share the row */
+        padding: 12px 16px; /* Adjust padding */
     }
 }

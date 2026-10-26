@@ -158,7 +158,7 @@ const ActivityAccommodation: React.FC = () => {
               Add Accommodation
             </button>
             <button
-              className="toggle-button-unique"
+              className="btn btn-secondary"
               onClick={() => navigate(`/trip/${tripId}`)}
             >
               Done – view trip

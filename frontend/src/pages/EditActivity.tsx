@@ -42,6 +42,7 @@ const EditActivity: React.FC = () => {
   const [formData, setFormData] = useState<EditFormData>(EMPTY_FORM);
   const [activities, setActivities] = useState<ActivityDTO[]>([]);
   const [accommodations, setAccommodations] = useState<AccommodationDTO[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // true until the first fetch finishes
 
   // Fetch the activities and accommodations of this trip
   const fetchData = useCallback(async () => {
@@ -50,6 +51,8 @@ const EditActivity: React.FC = () => {
       setAccommodations(await getAccommodationsByTripId(tripId));
     } catch (error) {
       alert(getErrorMessage(error, 'Failed to fetch data. Please try again.'));
+    } finally {
+      setLoading(false);
     }
   }, [tripId]);
 
@@ -169,6 +172,9 @@ const EditActivity: React.FC = () => {
   // Activities have a title, accommodations a name
   const nameField = activeForm === 'accommodation' ? 'name' : 'title';
 
+  // "Cultural_Experience" -> "Cultural Experience"
+  const label = (value: string) => value.replace(/_/g, ' ');
+
   return (
     <div className="new-image">
       <Header
@@ -180,55 +186,92 @@ const EditActivity: React.FC = () => {
       <div className="activity-accommodation-unique-container">
         <h2>Edit Activities and Accommodations</h2>
         <main>
-          <div className="toggle-container-unique">
-            <button className="toggle-button-unique" onClick={() => navigate(`/trip/${tripId}`)}>
+          <div className="page-actions">
+            <button className="btn btn-secondary" onClick={() => navigate(`/trip/${tripId}`)}>
               Done – view trip
             </button>
           </div>
 
+          {loading ? (
+            <p className="loading-message">Loading...</p>
+          ) : (
           <div className="edit-lists">
             <h3>Activities</h3>
-            <ul>
-              {activities.map((activity) => (
-                <li key={activity.id}>
-                  <span>{activity.title}</span>
-                  <button
-                    className="edit-button"
-                    onClick={() => handleEditActivity(activity)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDelete('activity', activity.id, activity.title)}
-                  >
-                    Delete
-                  </button>
-                </li>
-              ))}
-            </ul>
+            {activities.length === 0 ? (
+              <div className="empty-state">
+                <p>No activities yet.</p>
+                <button className="btn btn-primary btn-sm" onClick={() => navigate(`/activity/${tripId}`)}>
+                  Add an activity
+                </button>
+              </div>
+            ) : (
+              <ul className="item-list">
+                {activities.map((activity) => (
+                  <li key={activity.id} className="item-row">
+                    <div className="item-main">
+                      <span className="item-title">{activity.title}</span>
+                      <span className="item-meta">
+                        {label(activity.category)} · {activity.startDateTime} · Cost: {activity.cost}
+                      </span>
+                    </div>
+                    <div className="item-actions">
+                      <button
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => handleEditActivity(activity)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleDelete('activity', activity.id, activity.title)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
 
             <h3>Accommodations</h3>
-            <ul>
-              {accommodations.map((accommodation) => (
-                <li key={accommodation.id}>
-                  <span>{accommodation.name}</span>
-                  <button
-                    className="edit-button"
-                    onClick={() => handleEditAccommodation(accommodation)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDelete('accommodation', accommodation.id, accommodation.name)}
-                  >
-                    Delete
-                  </button>
-                </li>
-              ))}
-            </ul>
+            {accommodations.length === 0 ? (
+              <div className="empty-state">
+                <p>No accommodations yet.</p>
+                <button className="btn btn-primary btn-sm" onClick={() => navigate(`/activity/${tripId}`)}>
+                  Add an accommodation
+                </button>
+              </div>
+            ) : (
+              <ul className="item-list">
+                {accommodations.map((accommodation) => (
+                  <li key={accommodation.id} className="item-row">
+                    <div className="item-main">
+                      <span className="item-title">{accommodation.name}</span>
+                      <span className="item-meta">
+                        {label(accommodation.type)} · {accommodation.checkInDate} → {accommodation.checkOutDate}
+                        {accommodation.cost != null && ` · Cost: ${accommodation.cost}`}
+                      </span>
+                    </div>
+                    <div className="item-actions">
+                      <button
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => handleEditAccommodation(accommodation)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleDelete('accommodation', accommodation.id, accommodation.name)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
+          )}
 
           {activeForm && (
             <div className="form-container-unique">

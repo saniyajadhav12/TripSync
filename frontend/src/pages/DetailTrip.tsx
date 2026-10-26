@@ -111,6 +111,14 @@ const DetailTrip: React.FC = () => {
             <div className="section-header">
                 <Activity className="icon activity-icon" />
             </div>
+            {!loading && activities.length === 0 && (
+                <div className="empty-state">
+                    <p>No activities yet.</p>
+                    <button className="btn btn-primary btn-sm" onClick={() => navigate(`/activity/${id}`)}>
+                        Add an activity
+                    </button>
+                </div>
+            )}
             {/* Loop through the activities and display each one */}
             {activities.map((activity) => (
                 <div key={activity.id} className="activity-item">
@@ -133,6 +141,14 @@ const DetailTrip: React.FC = () => {
             <div className="section-header">
                 <Bed className="icon accommodation-icon" />
             </div>
+            {!loading && accommodations.length === 0 && (
+                <div className="empty-state">
+                    <p>No accommodations yet.</p>
+                    <button className="btn btn-primary btn-sm" onClick={() => navigate(`/activity/${id}`)}>
+                        Add an accommodation
+                    </button>
+                </div>
+            )}
             {/* Loop through the accommodations and display each one */}
             {accommodations.map((accommodation) => (
                 <div key={accommodation.id} className="accommodation-item">
@@ -172,11 +188,11 @@ const DetailTrip: React.FC = () => {
             <div className="content-wrapper">
                 <h1 className="page-title">{trip?.destination}</h1>
 
-                <div className="tab-navigation">
-                    <button className="tab-btn" onClick={() => navigate(`/activity/${id}`)}>
+                <div className="page-actions">
+                    <button className="btn btn-primary" onClick={() => navigate(`/activity/${id}`)}>
                         Add activity / accommodation
                     </button>
-                    <button className="tab-btn" onClick={() => navigate(`/trip/${id}/edit-items`)}>
+                    <button className="btn btn-secondary" onClick={() => navigate(`/trip/${id}/edit-items`)}>
                         Edit activities &amp; accommodations
                     </button>
                 </div>

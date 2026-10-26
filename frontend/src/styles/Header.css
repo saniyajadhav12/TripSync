@@ -6,16 +6,24 @@
   left: 0;
   display: flex;
   align-items: center; /* Vertically center items */
-  justify-content: space-between; /* Spread items across the row */
+  justify-content: flex-start;
   background-color: #587ddb;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
   height: 45px; /* Adjust header height */
   padding: 0 20px;
+  gap: 8px;
+}
+
+/* Children: [add button or placeholder] [title] [profile or placeholder] [logout or placeholder].
+   The title is absolutely centered, so push the right-hand pair to the right edge. */
+.header-container > :nth-child(3) {
+  margin-left: auto;
 }
 
 /* Add Post Button (Plus Icon) */
 .header-container .add-post-button {
+  flex-shrink: 0;
   font-size: 30px; /* Adjust font size for better visibility */
   background: none;
   border: none;
@@ -29,8 +37,13 @@
 }
 
 /* Website Title */
+/* Centered on the header itself, so it stays centered whichever icons are on each side.
+   The max-width keeps room for the icons so they never overlap. */
 .header-container .header-title {
-  flex-grow: 1; /* Push the title to the center */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100% - 200px);
   text-align: center;
   margin: 0;
 }
@@ -40,6 +53,9 @@
   font-size: 24px;
   color: white;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Profile Container */
@@ -48,6 +64,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
   width: 30px; /* Fixed width to match Add Post button */
   height: 30px; /* Fixed height to ensure proper alignment */
   margin-right: 10px;
@@ -90,6 +107,7 @@
 
 /* Placeholder for alignment */
 .header-container .placeholder {
+  flex-shrink: 0;
   width: 40px; /* Same width as Add Post button or Profile Icon */
   height: 40px;
 }
@@ -102,6 +120,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
   z-index: 999; /* Ensure it's on top */
-  margin-right: 40px;
+  margin-right: 8px;
+}
+
+@media (max-width: 600px) {
+  .header-container {
+    padding: 0 12px;
+  }
+
+  .header-container .header-title h1 {
+    font-size: 20px;
+  }
+
+  .header-container .profile-container {
+    margin-right: 0;
+  }
+
+  .header-container .logout-button {
+    margin-right: 0;
+  }
 }
