@@ -1,0 +1,35 @@
+# Java / Maven
+target/
+/bin/
+
+# IDE / editor
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+
+# Frontend
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
