@@ -1,17 +1,19 @@
 package edu.neu.csye6200.tripsync.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@ToString
 @Entity
 public class Accommodation {
 
@@ -34,6 +36,7 @@ public class Accommodation {
 
     @ManyToOne
     @JoinColumn(name = "trip_id")
+    @ToString.Exclude
     private Trip trip;
 
     @PrePersist

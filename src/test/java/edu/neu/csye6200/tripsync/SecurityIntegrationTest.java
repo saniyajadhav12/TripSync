@@ -1,19 +1,10 @@
 package edu.neu.csye6200.tripsync;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Map;
-import java.util.UUID;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.everyItem;
@@ -29,69 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-class SecurityIntegrationTest {
-
-    private static final String PASSWORD = "correct-horse-battery";
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    // The database is shared across tests in this class, so every test uses fresh usernames
-    private record TestUser(long id, String username, String token) {
-    }
-
-    private static String uniqueUsername(String prefix) {
-        return prefix + "-" + UUID.randomUUID().toString().substring(0, 8);
-    }
-
-    private String json(Object value) throws Exception {
-        return objectMapper.writeValueAsString(value);
-    }
-
-    private static String bearer(TestUser user) {
-        return "Bearer " + user.token();
-    }
-
-    private Map<String, Object> signupBody(String username) {
-        return Map.of(
-                "firstName", "Test",
-                "lastName", "User",
-                "email", username + "@example.com",
-                "username", username,
-                "password", PASSWORD);
-    }
-
-    private TestUser registerAndLogin(String prefix) throws Exception {
-        String username = uniqueUsername(prefix);
-        mockMvc.perform(post("/api/users/signup").contentType(MediaType.APPLICATION_JSON).content(json(signupBody(username))))
-                .andExpect(status().isCreated());
-
-        MvcResult login = mockMvc.perform(post("/api/users/login").contentType(MediaType.APPLICATION_JSON)
-                        .content(json(Map.of("username", username, "password", PASSWORD))))
-                .andExpect(status().isOk())
-                .andReturn();
-        JsonNode body = objectMapper.readTree(login.getResponse().getContentAsString());
-        return new TestUser(body.get("user").get("id").asLong(), username, body.get("token").asText());
-    }
-
-    private long createTrip(TestUser owner, String destination) throws Exception {
-        MvcResult result = mockMvc.perform(post("/api/trips").header(HttpHeaders.AUTHORIZATION, bearer(owner))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json(Map.of(
-                                "destination", destination,
-                                "description", "A trip",
-                                "startDate", "2025-06-01",
-                                "endDate", "2025-06-10"))))
-                .andExpect(status().isCreated())
-                .andReturn();
-        return objectMapper.readTree(result.getResponse().getContentAsString()).get("id").asLong();
-    }
+class SecurityIntegrationTest extends ApiTestSupport {
 
     // a. signup returns 201 and never exposes the password
     @Test
@@ -193,12 +122,8 @@ class SecurityIntegrationTest {
         TestUser bob = registerAndLogin("bob");
         long tripId = createTrip(alice, "Kyoto");
 
-        Map<String, Object> activity = Map.of(
-                "title", "Temple visit", "category", "Sightseeing", "description", "x",
-                "startDateTime", "2025-06-02", "endDateTime", "2025-06-02", "cost", 10, "tripId", tripId);
-        Map<String, Object> accommodation = Map.of(
-                "name", "Ryokan", "address", "Kyoto", "type", "Hotel",
-                "checkInDate", "2025-06-01", "checkOutDate", "2025-06-10", "cost", 500, "tripId", tripId);
+        Map<String, Object> activity = activityBody(tripId);
+        Map<String, Object> accommodation = accommodationBody(tripId);
 
         mockMvc.perform(post("/api/activities").header(HttpHeaders.AUTHORIZATION, bearer(bob))
                         .contentType(MediaType.APPLICATION_JSON).content(json(activity)))

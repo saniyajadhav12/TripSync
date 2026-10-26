@@ -5,9 +5,13 @@ import edu.neu.csye6200.tripsync.model.Activity;
 import edu.neu.csye6200.tripsync.model.Trip;
 import edu.neu.csye6200.tripsync.service.ActivityService;
 import edu.neu.csye6200.tripsync.service.TripService;
+import edu.neu.csye6200.tripsync.validation.OnCreate;
+import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +47,8 @@ public class ActivityController {
 
     // Create a new activity on one of the current user's trips
     @PostMapping
-    public ResponseEntity<ActivityDTO> createActivity(@AuthenticationPrincipal Long userId, @RequestBody ActivityDTO activityDTO) {
+    public ResponseEntity<ActivityDTO> createActivity(@AuthenticationPrincipal Long userId,
+                                                      @Validated({Default.class, OnCreate.class}) @RequestBody ActivityDTO activityDTO) {
         Trip trip = tripService.getTripForUser(activityDTO.getTripId(), userId);
 
         Activity activity = new Activity();
@@ -77,7 +82,7 @@ public class ActivityController {
     // Update an existing activity (it stays on its current trip)
     @PutMapping("/{id}")
     public ResponseEntity<ActivityDTO> updateActivity(@AuthenticationPrincipal Long userId, @PathVariable Long id,
-                                                      @RequestBody ActivityDTO activityDTO) {
+                                                      @Valid @RequestBody ActivityDTO activityDTO) {
         Activity activity = new Activity();
         activity.setTitle(activityDTO.getTitle());
         activity.setCategory(activityDTO.getCategory());

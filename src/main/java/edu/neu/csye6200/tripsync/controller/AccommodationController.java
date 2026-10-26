@@ -5,9 +5,13 @@ import edu.neu.csye6200.tripsync.model.Accommodation;
 import edu.neu.csye6200.tripsync.model.Trip;
 import edu.neu.csye6200.tripsync.service.AccommodationService;
 import edu.neu.csye6200.tripsync.service.TripService;
+import edu.neu.csye6200.tripsync.validation.OnCreate;
+import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -61,7 +65,7 @@ public class AccommodationController {
     // Create a new accommodation on one of the current user's trips
     @PostMapping
     public ResponseEntity<AccommodationDTO> createAccommodation(@AuthenticationPrincipal Long userId,
-                                                                @RequestBody AccommodationDTO accommodationDTO) {
+                                                                @Validated({Default.class, OnCreate.class}) @RequestBody AccommodationDTO accommodationDTO) {
         Trip trip = tripService.getTripForUser(accommodationDTO.getTripId(), userId);
 
         Accommodation accommodation = new Accommodation();
@@ -81,7 +85,7 @@ public class AccommodationController {
     // Update an existing accommodation (it stays on its current trip)
     @PutMapping("/{id}")
     public ResponseEntity<AccommodationDTO> updateAccommodation(@AuthenticationPrincipal Long userId, @PathVariable Long id,
-                                                                @RequestBody AccommodationDTO accommodationDTO) {
+                                                                @Valid @RequestBody AccommodationDTO accommodationDTO) {
         Accommodation accommodation = new Accommodation();
         accommodation.setName(accommodationDTO.getName());
         accommodation.setAddress(accommodationDTO.getAddress());

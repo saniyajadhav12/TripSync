@@ -5,6 +5,7 @@ import edu.neu.csye6200.tripsync.exception.ResourceNotFoundException;
 import edu.neu.csye6200.tripsync.model.Trip;
 import edu.neu.csye6200.tripsync.service.TripService;
 import edu.neu.csye6200.tripsync.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -48,7 +49,7 @@ public class TripController {
 
     // Create a new trip owned by the current user (any userId in the body is ignored)
     @PostMapping
-    public ResponseEntity<TripDTO> createTrip(@AuthenticationPrincipal Long userId, @RequestBody TripDTO tripDTO) {
+    public ResponseEntity<TripDTO> createTrip(@AuthenticationPrincipal Long userId, @Valid @RequestBody TripDTO tripDTO) {
         Trip trip = new Trip();
         trip.setDestination(tripDTO.getDestination());
         trip.setDescription(tripDTO.getDescription());
@@ -80,7 +81,7 @@ public class TripController {
     // Update an existing trip (the owner cannot be changed)
     @PutMapping("/{id}")
     public ResponseEntity<TripDTO> updateTrip(@AuthenticationPrincipal Long userId, @PathVariable Long id,
-                                              @RequestBody TripDTO tripDTO) {
+                                              @Valid @RequestBody TripDTO tripDTO) {
         Trip trip = new Trip();
         trip.setDestination(tripDTO.getDestination());
         trip.setDescription(tripDTO.getDescription());

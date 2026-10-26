@@ -2,17 +2,17 @@ package edu.neu.csye6200.tripsync.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "users") // "user" is a reserved word in H2 and other databases
 public class User {
@@ -24,7 +24,9 @@ public class User {
     private String firstName;
     private String lastName;
     @Email
+    @Column(unique = true)
     private String email;
+    @Column(unique = true)
     private String username;
     @ToString.Exclude
     private String password;
@@ -34,9 +36,6 @@ public class User {
     public User(Long userId) {
         this.id = userId;
     }
-
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Trip> trips;
 
     @PrePersist
     public void prePersist() {
