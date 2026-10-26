@@ -8,6 +8,7 @@ import CreateTrip from './pages/CreateTrip';
 import ActivityAccommodation from './pages/ActivityAccommodation';
 import DetailTrip from './pages/DetailTrip'
 import EditTrip from './pages/EditTrip';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 function App() {
@@ -19,12 +20,15 @@ function App() {
           <Route path = "/" element={<LoginPage />} />
           <Route path = "/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/activity/:tripId" element={<ActivityAccommodation />} />
-          <Route path = "/create-trip" element={<CreateTrip />} />
-          <Route path = "/edit-trip/:id" element={<EditTrip />} />
-          <Route path="/trip/:id" element={<DetailTrip />} />
+          {/* Pages below require a logged-in user */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/activity/:tripId" element={<ActivityAccommodation />} />
+            <Route path = "/create-trip" element={<CreateTrip />} />
+            <Route path = "/edit-trip/:id" element={<EditTrip />} />
+            <Route path="/trip/:id" element={<DetailTrip />} />
+          </Route>
         </Routes>
       </div>
     </Router>

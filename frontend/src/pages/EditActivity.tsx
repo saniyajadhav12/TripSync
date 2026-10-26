@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Hotel, Plane } from 'lucide-react';
 import Header from '../components/Header'; // Import Header component
 import '../styles/ActivityAccommodation.css';
-import axios from 'axios';
+import axiosInstance from '../config/axios';
+import { clearSession } from '../auth';
 import { ActivityDTO, Category } from '../data/ActivityDTO';
 import { AccommodationDTO, AccommodationType } from '../data/AccommodationDTO';
 
@@ -35,17 +36,17 @@ const EditActivity: React.FC = () => {
   const [tripId] = useState<number>(1); // Replace with the actual trip ID
   const [userId] = useState<number>(1); // Replace with the logged-in user's ID
 
-  const API_BASE_URL = 'http://localhost:8080/api';
+  const API_BASE_URL = '/api';
 
   // Fetch activities and accommodations for the specific user and trip
   const fetchData = useCallback(async () => {
     try {
-      const activitiesResponse = await axios.get<ActivityDTO[]>(
+      const activitiesResponse = await axiosInstance.get<ActivityDTO[]>(
         `${API_BASE_URL}/activities/trip/${tripId}?userId=${userId}`
       );
       setActivities(activitiesResponse.data);
 
-      const accommodationsResponse = await axios.get<AccommodationDTO[]>(
+      const accommodationsResponse = await axiosInstance.get<AccommodationDTO[]>(
         `${API_BASE_URL}/accommodations/trip/${tripId}?userId=${userId}`
       );
       setAccommodations(accommodationsResponse.data);
@@ -71,10 +72,10 @@ const EditActivity: React.FC = () => {
       const payload = { ...formData, tripId, userId };
 
       if (activeForm === 'activity') {
-        await axios.put(`${API_BASE_URL}/activities/${formData.id}`, payload);
+        await axiosInstance.put(`${API_BASE_URL}/activities/${formData.id}`, payload);
         alert('Activity updated successfully!');
       } else if (activeForm === 'accommodation') {
-        await axios.put(
+        await axiosInstance.put(
           `${API_BASE_URL}/accommodations/${formData.id}`,
           payload
         );
@@ -128,7 +129,7 @@ const EditActivity: React.FC = () => {
   };
 
   const logout = () => {
-    sessionStorage.removeItem('user');
+    clearSession();
     window.location.href = '/';
   };
 

@@ -4,6 +4,7 @@ import { getTripById, updateTrip } from "../api/tripApi"; // API functions to ge
 import "../styles/CreateTrip.css"; // CSS for styling the component
 import { useParams } from "react-router-dom"; // Hook to access route parameters
 import { TripDTO } from "../data/TripDTO"; // Trip Data Transfer Object type
+import { getCurrentUser } from "../auth"; // Logged-in user from the session
 
 const EditTrip: React.FC = () => {
   // Get the trip ID from URL parameters
@@ -24,8 +25,7 @@ const EditTrip: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Retrieve the logged-in user from session storage
-  const storedUser = sessionStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const user = getCurrentUser();
 
   // Fetch the trip data by its ID when the component mounts
   useEffect(() => {
@@ -59,7 +59,7 @@ const EditTrip: React.FC = () => {
     e.preventDefault(); // Prevent default form submission behavior
 
     // Validate user authentication
-    if (!user.id) {
+    if (!user?.id) {
       setError("User is not authenticated."); // Set error if user is not logged in
       return;
     }

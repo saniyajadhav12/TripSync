@@ -1,107 +1,54 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
+import axiosInstance from '../config/axios';
+import { saveSession } from '../auth';
+import { LoginResponse } from '../data/LoginResponse';
+import { UserResponse } from '../data/UserResponse';
 
-// Define the base URL of your Spring Boot backend
-const API_URL = 'http://localhost:8080/api/users';
+const API_URL = '/api/users';
 
-// Interface for the User type
-export interface User {
-  id: number;
-  username: string;
+// Fields the backend expects when registering a user
+export interface SignupData {
+  firstName: string;
+  lastName: string;
   email: string;
+  username: string;
   password: string;
 }
 
-// Get all users
-export const getAllUsers = async (): Promise<User[]> => {
-  try {
-    const response = await axios.get(API_URL);
-    return response.data;  // Return the list of users
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    throw error;
+// The backend returns { "message": "..." } for errors such as a duplicate username (409)
+const getErrorMessage = (error: unknown, fallback: string): string => {
+  if (axios.isAxiosError<{ message?: string }>(error)) {
+    return error.response?.data?.message || fallback;
   }
-};
-
-// Get a user by ID
-export const getUserById = async (id: number): Promise<User | null> => {
-  try {
-    const response = await axios.get(`${API_URL}/${id}`);
-    return response.data;  // Return the user object
-  } catch (error) {
-    console.error(`Error fetching user with ID ${id}:`, error);
-    return null;
-  }
+  return fallback;
 };
 
 // Create a new user
-export const createUser = async (userData: { username: string; email: string; password: string }) => {
+export const createUser = async (userData: SignupData) => {
   try {
-    const response = await axios.post(`${API_URL}/signup`, userData);  // Backend API URL
-    console.log(response);
-    return response;
+    return await axiosInstance.post<UserResponse>(`${API_URL}/signup`, {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      username: userData.username,
+      password: userData.password,
+    });
   } catch (error) {
-    // Check if the error is an Axios error and capture the message
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      if (axiosError.response) {
-        // Log full response for debugging
-        console.error("Error response:", axiosError.response);
-        // Return the specific error message from the backend
-        throw new Error(axiosError.response.statusText || 'Error registering user');
-      } else {
-        console.error('Error: ', axiosError.message);
-        throw new Error(axiosError.message || 'Error registering user');
-      }
-    } else {
-      console.error('Unexpected error: ', error);
-      throw new Error('An unexpected error occurred.');
+    throw new Error(getErrorMessage(error, 'Error registering user. Please try again.'));
+  }
+};
+
+// Authenticate user (login) and store the token and user for later requests.
+// Returns null when the username or password is wrong.
+export const authenticateUser = async (username: string, password: string): Promise<UserResponse | null> => {
+  try {
+    const response = await axiosInstance.post<LoginResponse>(`${API_URL}/login`, { username, password });
+    saveSession(response.data.token, response.data.user);
+    return response.data.user;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      return null;
     }
-  }
-};
-
-// Update an existing user
-export const updateUser = async (id: number, user: User): Promise<User | null> => {
-  try {
-    const response = await axios.put(`${API_URL}/${id}`, user);
-    return response.data;  // Return the updated user
-  } catch (error) {
-    console.error(`Error updating user with ID ${id}:`, error);
-    return null;
-  }
-};
-
-// Delete a user by ID
-export const deleteUser = async (id: number): Promise<void> => {
-  try {
-    await axios.delete(`${API_URL}/${id}`);
-    console.log(`User with ID ${id} deleted successfully`);
-  } catch (error) {
-    console.error(`Error deleting user with ID ${id}:`, error);
     throw error;
-  }
-};
-
-// Authenticate user (login)
-export const authenticateUser = async (username: string, password: string): Promise<User | null> => {
-  try {
-    const response = await axios.post(`${API_URL}/login`, {
-      username, password
-    }, 
-    {
-      params: { username, password },
-    }
-  );
-
-    const user = response.data;  // Return the authenticated user
-    console.log(user);
-    if(user) {
-      sessionStorage.setItem('user', JSON.stringify(user)); //Store user object 
-    }
-
-    return user;
-
-  } catch (error) {
-    console.error("Authentication failed:", error);
-    return null;
   }
 };

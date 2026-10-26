@@ -5,19 +5,12 @@ import '../styles/ProfilePage.css';
 import { getTripsByUserId, deleteTrip } from '../api/tripApi'; // Import the API function
 import { useNavigate } from 'react-router-dom';
 import { TripDTO } from '../data/TripDTO';
-
-interface User {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    username: string;
-    // other details
-}
+import { UserResponse } from '../data/UserResponse';
+import { clearSession, getCurrentUser } from '../auth';
 
 const ProfilePage: React.FC = () => {
     const [isAccountDetailsExpanded, setIsAccountDetailsExpanded] = useState(false); // State to toggle account details visibility
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<UserResponse | null>(null);
     const [userTrips, setUserTrips] = useState<TripDTO[]>([]); // State to store trips
     const [loading, setLoading] = useState<boolean>(true); // Loading state for API call
     const [dialogOpen, setDialogOpen] = useState<boolean>(false); // Track dialog open state
@@ -27,12 +20,11 @@ const ProfilePage: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Retrieve the user object from sessionStorage
-        const storedUser = sessionStorage.getItem('user');
-        if (storedUser) {
-            const parsedUser: User = JSON.parse(storedUser);
-            setUser(parsedUser);
-            fetchUserTrips(parsedUser.id); // Fetch user trips using the userId
+        // Retrieve the logged-in user from the session
+        const currentUser = getCurrentUser();
+        if (currentUser) {
+            setUser(currentUser);
+            fetchUserTrips(currentUser.id); // Fetch user trips using the userId
         }
     }, []);
 
@@ -82,10 +74,9 @@ const ProfilePage: React.FC = () => {
             setDialogOpen(false);
             setSelectedTrip(null);
             setConfirmDeleteOpen(false);
-            const storedUser = sessionStorage.getItem('user');
-            if (storedUser) {
-                const parsedUser: User = JSON.parse(storedUser);
-                fetchUserTrips(parsedUser.id); // Fetch user trips using the userId
+            const currentUser = getCurrentUser();
+            if (currentUser) {
+                fetchUserTrips(currentUser.id); // Fetch user trips using the userId
             }
         }
     };
@@ -106,7 +97,7 @@ const ProfilePage: React.FC = () => {
                 addPost={handleAddTrip}
                 isLogout={true}
                 logout={() => {
-                    sessionStorage.removeItem('user');
+                    clearSession();
                     window.location.href = '/';
                 }}
             />

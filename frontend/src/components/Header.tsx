@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../styles/Header.css";
 import { Link } from "react-router-dom";
+import { clearSession } from "../auth";
 
 interface HeaderProps {
   isAddPost: boolean;
@@ -53,9 +54,9 @@ const Header: React.FC<HeaderProps> = ({
   const handleLogout = () => {
     // Confirm before logging out
     const confirmLogout = window.confirm("Are you sure you want to log out?");
-    if (confirmLogout && logout) {
-      logout(); // Proceed with logout if confirmed
-      sessionStorage.removeItem('user');
+    if (confirmLogout) {
+      logout?.(); // Run any page-specific logout logic first
+      clearSession(); // Remove both the token and the user
       window.location.href = '/';
     }
   };

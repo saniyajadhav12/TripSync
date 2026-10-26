@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Header from "../components/Header";
 import { createTrip } from "../api/tripApi";
 import "../styles/CreateTrip.css";
+import { getCurrentUser } from "../auth";
 
 const CreateTrip: React.FC = () => {
   const [trip, setTrip] = useState({
@@ -14,8 +15,7 @@ const CreateTrip: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const storedUser = sessionStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const user = getCurrentUser();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

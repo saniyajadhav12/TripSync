@@ -43,17 +43,14 @@ const DetailTrip: React.FC = () => {
       
             // Fetch trip details
             const tripResponse = await getTripById(parseInt(id));
-            console.log("Trip fetched (DetailTrip): ", tripResponse);
             setTrip(tripResponse);
       
             // Fetch accommodations by trip ID
             const accommodationsResponse = await getAccommodationsByTripId(parseInt(id));
-            console.log("Accommodations fetched: ", accommodationsResponse);
             setAccommodations(accommodationsResponse);
       
             // Fetch activities by trip ID
             const activitiesResponse = await getActivitiesByTripId(parseInt(id));
-            console.log("Activities fetched: ", activitiesResponse);
               setActivities(activitiesResponse);
       
           } catch (error) {

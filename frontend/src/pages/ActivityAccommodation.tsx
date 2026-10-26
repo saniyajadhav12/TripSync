@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Hotel, Plane, Compass } from 'lucide-react';
 import Header from '../components/Header'; // Import Header component
 import '../styles/ActivityAccommodation.css';
-import axios from 'axios';
+import axiosInstance from '../config/axios';
 
 type FormType = "activity" | "accommodation";
 
@@ -24,8 +24,6 @@ const ActivityAccommodation: React.FC = () => {
     checkOutDate: "",
     review: "",
   });
-
-  // const API_BASE_URL = 'http://localhost:8080/api';
 
   useEffect(() => {
     if (!tripId) {
@@ -57,7 +55,7 @@ const ActivityAccommodation: React.FC = () => {
           tripId: parseInt(tripId),
         };
 
-        await axios.post("http://localhost:8080/api/activities", activityPayload);
+        await axiosInstance.post("/api/activities", activityPayload);
         alert("Activity added successfully!");
       } else if (activeForm === "accommodation") {
         const accommodationPayload = {
@@ -71,8 +69,8 @@ const ActivityAccommodation: React.FC = () => {
           tripId: parseInt(tripId),
         };
 
-        await axios.post(
-          "http://localhost:8080/api/accommodations",
+        await axiosInstance.post(
+          "/api/accommodations",
           accommodationPayload
         );
         alert("Accommodation added successfully!");

@@ -3,7 +3,6 @@ import '../styles/SignUpPage.css';
 import Header from '../components/Header';
 import { createUser } from '../api/userApi';
 import { Box, Typography, TextField, Button, CircularProgress } from '@mui/material';
-import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import signUpBackground from '../images/trip_4.jpg';
 
@@ -51,6 +50,10 @@ const SignUpPage: React.FC = () => {
       setError("All fields are required.");
       return;
     }
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
 
     setLoading(true);
     setError('');  // Clear any previous errors
@@ -73,10 +76,10 @@ const SignUpPage: React.FC = () => {
         }, 1000); // Small delay to allow user to see success message
       }
     } catch (error) {
-      // Specify error type as AxiosError to ensure proper typing
-      const axiosError = error as AxiosError;
-      setError(axiosError.message || 'Error registering user. Please try again.');
-      console.error('Error registering user:', axiosError.message);
+      // createUser throws an Error carrying the backend's message (e.g. "Username is already taken")
+      const message = error instanceof Error ? error.message : 'Error registering user. Please try again.';
+      setError(message);
+      console.error('Error registering user:', message);
     } finally {
       setLoading(false);
     }
