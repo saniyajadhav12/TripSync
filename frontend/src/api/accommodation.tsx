@@ -50,13 +50,13 @@ export const createAccommodation = async (accommodation: AccommodationDTO): Prom
 };
 
 // Update an existing accommodation
-export const updateAccommodation = async (id: number, accommodation: AccommodationDTO): Promise<AccommodationDTO | null> => {
+export const updateAccommodation = async (id: number, accommodation: AccommodationDTO): Promise<AccommodationDTO> => {
   try {
     const response = await axiosInstance.put(`${API_URL}/${id}`, accommodation);
     return response.data;
   } catch (error) {
     console.error('Error updating accommodation:', error);
-    return null;
+    throw error;
   }
 };
 

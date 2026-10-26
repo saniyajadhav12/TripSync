@@ -5,6 +5,7 @@ import "../styles/CreateTrip.css"; // CSS for styling the component
 import { useParams } from "react-router-dom"; // Hook to access route parameters
 import { TripDTO } from "../data/TripDTO"; // Trip Data Transfer Object type
 import { getCurrentUser } from "../auth"; // Logged-in user from the session
+import { getErrorMessage } from "../api/errors"; // Backend error message helper
 
 const EditTrip: React.FC = () => {
   // Get the trip ID from URL parameters
@@ -65,7 +66,7 @@ const EditTrip: React.FC = () => {
     }
 
     // Validate date range
-    if (new Date(trip.startDate) >= new Date(trip.endDate)) {
+    if (new Date(trip.startDate) > new Date(trip.endDate)) {
       setError("Start date must be before the end date.");
       return;
     }
@@ -90,7 +91,7 @@ const EditTrip: React.FC = () => {
       }
     } catch (error) {
       console.log(error); // Log error for debugging
-      setError("Error updating trip. Please try again."); // Display user-friendly error message
+      setError(getErrorMessage(error, "Error updating trip. Please try again.")); // Show the backend message when there is one
     } finally {
       setLoading(false); // Reset loading state
     }

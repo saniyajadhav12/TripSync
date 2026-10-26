@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Hotel, Plane } from 'lucide-react';
 import Header from '../components/Header'; // Import Header component
 import '../styles/ActivityAccommodation.css';
-import axiosInstance from '../config/axios';
 import { clearSession } from '../auth';
+import { getActivitiesByTripId, updateActivity, deleteActivity } from '../api/activity';
+import { getAccommodationsByTripId, updateAccommodation, deleteAccommodation } from '../api/accommodation';
+import { getErrorMessage } from '../api/errors';
 import { ActivityDTO, Category } from '../data/ActivityDTO';
 import { AccommodationDTO, AccommodationType } from '../data/AccommodationDTO';
 
@@ -16,107 +19,137 @@ type EditFormData = Partial<Omit<ActivityDTO, 'category'>> &
     type?: AccommodationType | '';
   };
 
+const EMPTY_FORM: EditFormData = {
+  title: '',
+  name: '',
+  cost: 0,
+  category: '',
+  description: '',
+  startDateTime: '',
+  endDateTime: '',
+  address: '',
+  type: '',
+  checkInDate: '',
+  checkOutDate: '',
+  review: '',
+};
+
 const EditActivity: React.FC = () => {
+  const { tripId: tripIdParam } = useParams<{ tripId: string }>();
+  const tripId = Number(tripIdParam);
+  const navigate = useNavigate();
   const [activeForm, setActiveForm] = useState<FormType | null>(null);
-  const [formData, setFormData] = useState<EditFormData>({
-    title: '',
-    cost: 0,
-    category: '',
-    description: '',
-    startDateTime: '',
-    endDateTime: '',
-    address: '',
-    type: '',
-    checkInDate: '',
-    checkOutDate: '',
-    review: '',
-  });
+  const [formData, setFormData] = useState<EditFormData>(EMPTY_FORM);
   const [activities, setActivities] = useState<ActivityDTO[]>([]);
   const [accommodations, setAccommodations] = useState<AccommodationDTO[]>([]);
-  const [tripId] = useState<number>(1); // Replace with the actual trip ID
-  const [userId] = useState<number>(1); // Replace with the logged-in user's ID
 
-  const API_BASE_URL = '/api';
-
-  // Fetch activities and accommodations for the specific user and trip
+  // Fetch the activities and accommodations of this trip
   const fetchData = useCallback(async () => {
     try {
-      const activitiesResponse = await axiosInstance.get<ActivityDTO[]>(
-        `${API_BASE_URL}/activities/trip/${tripId}?userId=${userId}`
-      );
-      setActivities(activitiesResponse.data);
-
-      const accommodationsResponse = await axiosInstance.get<AccommodationDTO[]>(
-        `${API_BASE_URL}/accommodations/trip/${tripId}?userId=${userId}`
-      );
-      setAccommodations(accommodationsResponse.data);
+      setActivities(await getActivitiesByTripId(tripId));
+      setAccommodations(await getAccommodationsByTripId(tripId));
     } catch (error) {
-      console.error('Error fetching data:', error);
-      alert('Failed to fetch data. Please try again.');
+      alert(getErrorMessage(error, 'Failed to fetch data. Please try again.'));
     }
-  }, [tripId, userId]);
+  }, [tripId]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  const handleEditClick = (item: ActivityDTO | AccommodationDTO, type: FormType) => {
-    setFormData(item); // Pre-fill the form with the selected item's details
-    setActiveForm(type);
+  // Pre-fill the form with the selected item's details (null values become empty fields)
+  const handleEditActivity = (activity: ActivityDTO) => {
+    setFormData({
+      ...EMPTY_FORM,
+      id: activity.id,
+      title: activity.title,
+      category: activity.category,
+      description: activity.description ?? '',
+      startDateTime: activity.startDateTime,
+      endDateTime: activity.endDateTime ?? '',
+      cost: activity.cost,
+    });
+    setActiveForm('activity');
+  };
+
+  const handleEditAccommodation = (accommodation: AccommodationDTO) => {
+    setFormData({
+      ...EMPTY_FORM,
+      id: accommodation.id,
+      name: accommodation.name,
+      address: accommodation.address ?? '',
+      type: accommodation.type,
+      checkInDate: accommodation.checkInDate,
+      checkOutDate: accommodation.checkOutDate,
+      review: accommodation.review ?? '',
+      cost: accommodation.cost ?? 0,
+    });
+    setActiveForm('accommodation');
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (formData.id === undefined) {
+      return;
+    }
 
     try {
-      const payload = { ...formData, tripId, userId };
-
       if (activeForm === 'activity') {
-        await axiosInstance.put(`${API_BASE_URL}/activities/${formData.id}`, payload);
+        await updateActivity(formData.id, {
+          title: formData.title ?? '',
+          category: formData.category as Category, // the select is required, so a category is chosen
+          description: formData.description ?? '',
+          startDateTime: formData.startDateTime ?? '',
+          endDateTime: formData.endDateTime ?? '',
+          cost: formData.cost ?? 0,
+          tripId,
+        });
         alert('Activity updated successfully!');
       } else if (activeForm === 'accommodation') {
-        await axiosInstance.put(
-          `${API_BASE_URL}/accommodations/${formData.id}`,
-          payload
-        );
+        await updateAccommodation(formData.id, {
+          name: formData.name ?? '',
+          address: formData.address ?? '',
+          type: formData.type as AccommodationType, // the select is required, so a type is chosen
+          checkInDate: formData.checkInDate ?? '',
+          checkOutDate: formData.checkOutDate ?? '',
+          review: formData.review,
+          cost: formData.cost ?? 0,
+          tripId,
+        });
         alert('Accommodation updated successfully!');
       }
 
-      setFormData({
-        title: '',
-        cost: 0,
-        category: '',
-        description: '',
-        startDateTime: '',
-        endDateTime: '',
-        address: '',
-        type: '',
-        checkInDate: '',
-        checkOutDate: '',
-        review: '',
-      });
+      setFormData(EMPTY_FORM);
       setActiveForm(null);
       fetchData();
     } catch (error) {
-      console.error('Error updating data:', error);
-      alert('Failed to update data. Please try again.');
+      alert(getErrorMessage(error, 'Failed to update data. Please try again.'));
+    }
+  };
+
+  const handleDelete = async (type: FormType, id: number | undefined, label: string) => {
+    if (id === undefined || !window.confirm(`Delete "${label}"? This cannot be undone.`)) {
+      return;
+    }
+    try {
+      if (type === 'activity') {
+        await deleteActivity(id);
+      } else {
+        await deleteAccommodation(id);
+      }
+      // Close the form if the deleted item was being edited
+      if (formData.id === id && activeForm === type) {
+        setFormData(EMPTY_FORM);
+        setActiveForm(null);
+      }
+      fetchData();
+    } catch (error) {
+      alert(getErrorMessage(error, 'Failed to delete. Please try again.'));
     }
   };
 
   const handleCancel = () => {
-    setFormData({
-      title: '',
-      cost: 0,
-      category: '',
-      description: '',
-      startDateTime: '',
-      endDateTime: '',
-      address: '',
-      type: '',
-      checkInDate: '',
-      checkOutDate: '',
-      review: '',
-    });
+    setFormData(EMPTY_FORM);
     setActiveForm(null);
   };
 
@@ -133,6 +166,9 @@ const EditActivity: React.FC = () => {
     window.location.href = '/';
   };
 
+  // Activities have a title, accommodations a name
+  const nameField = activeForm === 'accommodation' ? 'name' : 'title';
+
   return (
     <div className="new-image">
       <Header
@@ -144,6 +180,12 @@ const EditActivity: React.FC = () => {
       <div className="activity-accommodation-unique-container">
         <h2>Edit Activities and Accommodations</h2>
         <main>
+          <div className="toggle-container-unique">
+            <button className="toggle-button-unique" onClick={() => navigate(`/trip/${tripId}`)}>
+              Done – view trip
+            </button>
+          </div>
+
           <div className="edit-lists">
             <h3>Activities</h3>
             <ul>
@@ -152,9 +194,15 @@ const EditActivity: React.FC = () => {
                   <span>{activity.title}</span>
                   <button
                     className="edit-button"
-                    onClick={() => handleEditClick(activity, 'activity')}
+                    onClick={() => handleEditActivity(activity)}
                   >
                     Edit
+                  </button>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDelete('activity', activity.id, activity.title)}
+                  >
+                    Delete
                   </button>
                 </li>
               ))}
@@ -167,11 +215,15 @@ const EditActivity: React.FC = () => {
                   <span>{accommodation.name}</span>
                   <button
                     className="edit-button"
-                    onClick={() =>
-                      handleEditClick(accommodation, 'accommodation')
-                    }
+                    onClick={() => handleEditAccommodation(accommodation)}
                   >
                     Edit
+                  </button>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDelete('accommodation', accommodation.id, accommodation.name)}
+                  >
+                    Delete
                   </button>
                 </li>
               ))}
@@ -191,12 +243,12 @@ const EditActivity: React.FC = () => {
 
                 {/* Common Fields */}
                 <div className="form-group-unique">
-                  <label htmlFor="title">Title</label>
+                  <label htmlFor={nameField}>{activeForm === 'accommodation' ? 'Name' : 'Title'}</label>
                   <input
                     type="text"
-                    id="title"
-                    value={formData.title}
-                    onChange={(e) => handleInputChange('title', e.target.value)}
+                    id={nameField}
+                    value={formData[nameField]}
+                    onChange={(e) => handleInputChange(nameField, e.target.value)}
                     required
                   />
                 </div>

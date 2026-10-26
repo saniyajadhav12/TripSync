@@ -1,5 +1,6 @@
 import axios from 'axios';
 import axiosInstance from '../config/axios';
+import { getErrorMessage } from './errors';
 import { saveSession } from '../auth';
 import { LoginResponse } from '../data/LoginResponse';
 import { UserResponse } from '../data/UserResponse';
@@ -14,14 +15,6 @@ export interface SignupData {
   username: string;
   password: string;
 }
-
-// The backend returns { "message": "..." } for errors such as a duplicate username (409)
-const getErrorMessage = (error: unknown, fallback: string): string => {
-  if (axios.isAxiosError<{ message?: string }>(error)) {
-    return error.response?.data?.message || fallback;
-  }
-  return fallback;
-};
 
 // Create a new user
 export const createUser = async (userData: SignupData) => {

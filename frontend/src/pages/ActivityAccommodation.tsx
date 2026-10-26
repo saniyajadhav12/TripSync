@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Hotel, Plane, Compass } from 'lucide-react';
 import Header from '../components/Header'; // Import Header component
 import '../styles/ActivityAccommodation.css';
 import axiosInstance from '../config/axios';
+import { getErrorMessage } from '../api/errors';
 
 type FormType = "activity" | "accommodation";
 
 const ActivityAccommodation: React.FC = () => {
   const { tripId } = useParams<{ tripId: string }>();
+  const navigate = useNavigate();
   const [activeForm, setActiveForm] = useState<FormType | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState({
@@ -91,7 +93,7 @@ const ActivityAccommodation: React.FC = () => {
       setActiveForm(null);
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert("Failed to submit data.");
+      alert(getErrorMessage(error, "Failed to submit data."));
     }
   };
 
@@ -154,6 +156,12 @@ const ActivityAccommodation: React.FC = () => {
             >
               <Hotel size={18} className="button-icon" />
               Add Accommodation
+            </button>
+            <button
+              className="toggle-button-unique"
+              onClick={() => navigate(`/trip/${tripId}`)}
+            >
+              Done – view trip
             </button>
           </div>
 

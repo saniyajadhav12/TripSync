@@ -191,7 +191,7 @@ const SignUpPage: React.FC = () => {
             </Button>
           </form>
           <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 2 }}>
-            Alredy have an account? <a href="/login">Login</a>
+            Already have an account? <a href="/login">Login</a>
           </Typography>
         </Box>
       </Box>

@@ -50,13 +50,13 @@ export const createTrip = async (trip: TripDTO): Promise<TripDTO> => {
 };
 
 // Update an existing trip
-export const updateTrip = async (id: number, trip: TripDTO): Promise<TripDTO | null> => {
+export const updateTrip = async (id: number, trip: TripDTO): Promise<TripDTO> => {
   try {
     const response = await axiosInstance.put(`${API_URL}/${id}`, trip);
     return response.data;
   } catch (error) {
     console.error('Error updating trip:', error);
-    return null;
+    throw error;
   }
 };
 

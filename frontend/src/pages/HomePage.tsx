@@ -142,11 +142,9 @@ const HomePage: React.FC = () => {
         ) : (
           /* Show a placeholder if no trips are available */
           <div className="no-trips-container">
-            <img
-              src="https://pumpernickelpixie.com/wp-content/uploads/2015/06/31.gif"
-              alt="No trips animation"
-              className="no-trips-gif"
-            />
+            <div className="no-trips-gif" role="img" aria-label="No trips yet" style={{ fontSize: "96px", textAlign: "center" }}>
+              🗺️
+            </div>
             <p>No trips found. Click "+" to add a new trip!</p>
           </div>
         )}

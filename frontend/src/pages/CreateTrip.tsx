@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import { createTrip } from "../api/tripApi";
 import "../styles/CreateTrip.css";
 import { getCurrentUser } from "../auth";
+import { getErrorMessage } from "../api/errors";
 
 const CreateTrip: React.FC = () => {
   const [trip, setTrip] = useState({
@@ -49,7 +50,7 @@ const CreateTrip: React.FC = () => {
       window.location.href = `/activity/${createdTrip.id}`;
     } catch (error) {
       console.error("Error creating trip:", error);
-      setError("Error creating trip. Please try again.");
+      setError(getErrorMessage(error, "Error creating trip. Please try again."));
     } finally {
       setLoading(false);
     }

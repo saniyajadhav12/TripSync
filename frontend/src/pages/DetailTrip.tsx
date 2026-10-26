@@ -4,7 +4,7 @@ import { TripDTO } from '../data/TripDTO';
 import { ActivityDTO } from '../data/ActivityDTO';
 import { AccommodationDTO } from '../data/AccommodationDTO';
 import { getTripById } from '../api/tripApi';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getActivitiesByTripId } from '../api/activity';
 import { getAccommodationsByTripId } from '../api/accommodation';
 import Header from '../components/Header'
@@ -22,6 +22,7 @@ import {
 
 const DetailTrip: React.FC = () => {
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const [trip, setTrip] = useState<TripDTO | null>(null);
     const [accommodations, setAccommodations] = useState<AccommodationDTO[]>([]);
     const [activities, setActivities] = useState<ActivityDTO[]>([]);
@@ -170,6 +171,15 @@ const DetailTrip: React.FC = () => {
 
             <div className="content-wrapper">
                 <h1 className="page-title">{trip?.destination}</h1>
+
+                <div className="tab-navigation">
+                    <button className="tab-btn" onClick={() => navigate(`/activity/${id}`)}>
+                        Add activity / accommodation
+                    </button>
+                    <button className="tab-btn" onClick={() => navigate(`/trip/${id}/edit-items`)}>
+                        Edit activities &amp; accommodations
+                    </button>
+                </div>
 
                 {loading && <p className="loading-message">Loading trip...</p>}
                 {error && <p className="error-message">{error}</p>}

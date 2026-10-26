@@ -165,11 +165,9 @@ const ProfilePage: React.FC = () => {
                     ))
                 ) : (
                     <Box textAlign="center" marginTop={4}>
-                        <img
-                            src="https://media.istockphoto.com/id/1327746564/vector/friends-going-on-road-trip-together.jpg?s=612x612&w=0&k=20&c=-e-DzTmY-skqrZzjGkJ4u_vUoNK-3e9LE9_PhAeGFFo="
-                            alt="No trips"
-                            className="no-trips-image"
-                        />
+                        <div className="no-trips-image" role="img" aria-label="No trips" style={{ fontSize: '96px' }}>
+                            🧳
+                        </div>
                         <Typography variant="h6" className='no-trip'>
                             No trips to display. Click "+" to add a new trip!
                         </Typography>

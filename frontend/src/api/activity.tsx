@@ -50,13 +50,13 @@ export const createActivity = async (activity: ActivityDTO): Promise<ActivityDTO
 };
 
 // Update an existing activity
-export const updateActivity = async (id: number, activity: ActivityDTO): Promise<ActivityDTO | null> => {
+export const updateActivity = async (id: number, activity: ActivityDTO): Promise<ActivityDTO> => {
   try {
     const response = await axiosInstance.put(`${API_URL}/${id}`, activity);
     return response.data;
   } catch (error) {
     console.error('Error updating activity:', error);
-    return null;
+    throw error;
   }
 };
 

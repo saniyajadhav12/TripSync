@@ -8,7 +8,10 @@ import CreateTrip from './pages/CreateTrip';
 import ActivityAccommodation from './pages/ActivityAccommodation';
 import DetailTrip from './pages/DetailTrip'
 import EditTrip from './pages/EditTrip';
+import EditActivity from './pages/EditActivity';
+import NotFoundPage from './pages/NotFoundPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import PublicOnlyRoute from './components/PublicOnlyRoute';
 
 
 function App() {
@@ -17,9 +20,12 @@ function App() {
     <Router>
       <div className = "App">
         <Routes>
-          <Route path = "/" element={<LoginPage />} />
-          <Route path = "/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
+          {/* Logged-in users are sent to /home */}
+          <Route element={<PublicOnlyRoute />}>
+            <Route path = "/" element={<LoginPage />} />
+            <Route path = "/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+          </Route>
           {/* Pages below require a logged-in user */}
           <Route element={<ProtectedRoute />}>
             <Route path="/home" element={<HomePage />} />
@@ -28,7 +34,9 @@ function App() {
             <Route path = "/create-trip" element={<CreateTrip />} />
             <Route path = "/edit-trip/:id" element={<EditTrip />} />
             <Route path="/trip/:id" element={<DetailTrip />} />
+            <Route path="/trip/:tripId/edit-items" element={<EditActivity />} />
           </Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
     </Router>
