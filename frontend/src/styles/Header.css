@@ -1,0 +1,144 @@
+.header-container {
+  width: 100%;
+  z-index: 1000; /* Keep the header on top */
+  position: fixed; /* Keep the header fixed at the top */
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center; /* Vertically center items */
+  justify-content: flex-start;
+  background-color: #587ddb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  height: 45px; /* Adjust header height */
+  padding: 0 20px;
+  gap: 8px;
+}
+
+/* Children: [add button or placeholder] [title] [profile or placeholder] [logout or placeholder].
+   The title is absolutely centered, so push the right-hand pair to the right edge. */
+.header-container > :nth-child(3) {
+  margin-left: auto;
+}
+
+/* Add Post Button (Plus Icon) */
+.header-container .add-post-button {
+  flex-shrink: 0;
+  font-size: 30px; /* Adjust font size for better visibility */
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  width: 40px; /* Fixed width */
+  height: 40px; /* Fixed height */
+  display: flex; /* Center the '+' symbol */
+  justify-content: center;
+  align-items: center;
+}
+
+/* Website Title */
+/* Centered on the header itself, so it stays centered whichever icons are on each side.
+   The max-width keeps room for the icons so they never overlap. */
+.header-container .header-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100% - 200px);
+  text-align: center;
+  margin: 0;
+}
+
+.header-container .header-title h1 {
+  margin: 0;
+  font-size: 24px;
+  color: white;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Profile Container */
+.header-container .profile-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  width: 30px; /* Fixed width to match Add Post button */
+  height: 30px; /* Fixed height to ensure proper alignment */
+  margin-right: 10px;
+  margin-top: 5px;
+}
+
+/* Profile Icon */
+.header-container .profile-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Dropdown Menu */
+.header-container .dropdown-menu {
+  position: absolute;
+  top: 50px; /* Dropdown appears just below the profile icon */
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  min-width: 120px;
+}
+
+.header-container .dropdown-menu button {
+  background: none;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: black;
+}
+
+.header-container .dropdown-menu button:hover {
+  background-color: #f2f2f2; /* Subtle hover effect */
+}
+
+/* Placeholder for alignment */
+.header-container .placeholder {
+  flex-shrink: 0;
+  width: 40px; /* Same width as Add Post button or Profile Icon */
+  height: 40px;
+}
+
+.header-container .logout-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  z-index: 999; /* Ensure it's on top */
+  margin-right: 8px;
+}
+
+@media (max-width: 600px) {
+  .header-container {
+    padding: 0 12px;
+  }
+
+  .header-container .header-title h1 {
+    font-size: 20px;
+  }
+
+  .header-container .profile-container {
+    margin-right: 0;
+  }
+
+  .header-container .logout-button {
+    margin-right: 0;
+  }
+}

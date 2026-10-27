@@ -1,0 +1,19 @@
+/* Global base styles. Shared component classes live in styles/shared.css.
+   Breakpoints used across the app: 600px (phone -> tablet) and 900px (tablet -> laptop),
+   matching MUI's sm and md breakpoints. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+}
+
+img {
+  max-width: 100%;
+}

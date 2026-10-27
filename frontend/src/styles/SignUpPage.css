@@ -1,0 +1,5 @@
+/* SignUpPage.css: the card itself is styled with MUI's sx prop in SignUpPage.tsx */
+
+.signup-page {
+  min-height: 100vh;
+}

@@ -1,0 +1,186 @@
+/* Page root (scoped so these rules don't clash with other pages' global CSS) */
+.activity-accommodation-container {
+  position: relative;
+  min-height: 100vh;
+  padding: 77px 16px 40px; /* Leave room for the fixed header */
+  overflow: hidden; /* Keep the decorative icons inside the page */
+}
+
+/* SVG Background Elements */
+.activity-accommodation-container .travel-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0; /* Keep SVGs behind the content */
+  pointer-events: none; /* Prevent SVGs from blocking interaction */
+}
+
+.bg-mountain {
+  position: absolute;
+  bottom: 5%; /* Adjust position to ensure visibility */
+  left: 10%;
+  color: rgba(144, 202, 249, 0.5); /* Light blue with transparency */
+  width: 200px;
+  height: 200px;
+}
+
+.bg-plane {
+  position: absolute;
+  top: 15%;
+  right: 15%;
+  color: rgba(255, 204, 128, 0.5); /* Orange with transparency */
+  width: 150px;
+  height: 150px;
+  transform: rotate(-10deg);
+}
+
+.bg-compass {
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  color: rgba(165, 214, 167, 0.5); /* Greenish tint with transparency */
+  width: 150px;
+  height: 150px;
+  transform: translateY(-50%); /* Center vertically relative to its top */
+}
+
+/* Content Wrapper */
+.content-wrapper {
+  position: relative;
+  z-index: 1; /* Ensure content is above SVGs */
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  color: black;
+  width: 100%;
+  max-width: 800px;
+  margin: 60px auto 0;
+}
+
+/* Page Title */
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0 0 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+/* Tab Navigation: wraps onto a second line on narrow screens */
+.tab-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  padding: 0.75rem 1rem;
+  margin-right: 0.5rem;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #555;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: color 0.3s, border-bottom-color 0.3s;
+}
+
+.tab-btn.active {
+  color: #0077b6;
+  border-bottom: 2px solid #0077b6;
+  font-weight: bold;
+}
+
+.tab-btn:hover {
+  color: #005f86;
+}
+
+/* Activity Sections */
+.activity-section {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow-wrap: anywhere;
+}
+
+.activity-detail {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.activity-detail .icon {
+  margin-right: 0.75rem;
+  width: 24px;
+  height: 24px;
+}
+
+/* Activity Detail Icons */
+/* Activity Detail Icons */
+.location-icon {
+  color: #2563eb; /* Blue */
+}
+
+.calendar-icon {
+  color: #16a34a; /* Green */
+}
+
+.duration-icon {
+  color: #9333ea; /* Purple */
+}
+
+.group-icon {
+  color: #dc2626; /* Red */
+}
+
+.difficulty-icon {
+  color: #fbbf24; /* Yellow */
+}
+
+.price-icon {
+  color: #15803d; /* Dark Green */
+}
+
+/* Additional Icons */
+.activity-icon {
+  color: #10b981; /* Emerald Green */
+}
+
+.bed-icon {
+  color: #0055ff; /* Neutral Gray */
+}
+
+.info-icon {
+  color: #3b82f6; /* Light Blue */
+}
+
+/* Phones: smaller card padding, smaller decorative icons, tabs share the row */
+@media (max-width: 600px) {
+  .content-wrapper {
+    padding: 1.25rem;
+    margin-top: 24px;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+  }
+
+  .tab-btn {
+    padding: 0.6rem 0.6rem;
+    margin-right: 0.25rem;
+  }
+
+  .activity-section {
+    padding: 1rem;
+  }
+
+  .bg-mountain,
+  .bg-plane,
+  .bg-compass {
+    width: 90px;
+    height: 90px;
+  }
+}
